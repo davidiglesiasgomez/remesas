@@ -214,15 +214,83 @@ document.getElementById('updateEmisorForm').addEventListener('submit', function(
     saveData(data, item)
 });
 
-const remesaIdPicker = MCDatepicker.create({
-    el: '#RemesaIDPicker',
+const ficheroIdPicker = MCDatepicker.create({
+    el: '#FicheroIDPicker',
     bodyType: 'modal',
     dateFormat: 'dd mm yy',
     autoClose: true,
     closeOndblclick: true,
     closeOnBlur: true
 });
-remesaIdPicker.onSelect((date, formatedDate) => {
-    document.getElementById('RemesaID').value = 'R' + formatedDate.replaceAll(' ', '')
+ficheroIdPicker.onSelect((date, formatedDate) => {
+    document.getElementById('FicheroID').value = 'R' + formatedDate.replaceAll(' ', '')
 });
-document.getElementById('RemesaIDBtn').onclick = () => remesaIdPicker.open();
+document.getElementById('FicheroIDBtn').onclick = () => ficheroIdPicker.open();
+
+document.getElementById('nuevoReciboBtn').onclick = (e) => {
+    e.preventDefault()
+    document.getElementById('contadorRecibosRemesa').value = 1 + parseInt(document.getElementById('contadorRecibosRemesa').value)
+    const contador = parseInt(document.getElementById('contadorRecibosRemesa').value)
+
+    const formRecibo = '' +
+    '<p>Recibo #' + contador + '</p>' +
+    '<div class="recibo">' +
+    '<div class="form-field">' +
+    '<label for="MndtId' + contador + '" class="form-field__label">Identificador</label>' +
+    '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="pure-input-2-3" />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="DtOfSgntr' + contador + '" class="form-field__label">Fecha de Firma</label>' +
+    '<input type="text" id="DtOfSgntr' + contador + '" name="DtOfSgntr' + contador + '" class="pure-input-2-3" readonly />' +
+    '</div>' +
+    '<input type="hidden" id="AmdmntInd' + contador + '" name="AmdmntInd' + contador + '" />' +
+    '<div class="form-field">' +
+    '<label for="Nm' + contador + '" class="form-field__label">Nombre del Deudor</label>' +
+    '<input type="text" id="Nm' + contador + '" name="Nm' + contador + '" class="pure-input-2-3" readonly />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="Ctry' + contador + '" class="form-field__label">País</label>' +
+    '<input type="text" id="Ctry' + contador + '" name="Ctry' + contador + '" class="pure-input-2-3" readonly />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="AdrLine1_' + contador + '" class="form-field__label">Dirección</label>' +
+    '<input type="text" id="AdrLine1_' + contador + '" name="AdrLine1_' + contador + '" class="pure-input-2-3" readonly />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="AdrLine2_' + contador + '" class="form-field__label">Dirección</label>' +
+    '<input type="text" id="AdrLine2_' + contador + '" name="AdrLine2_' + contador + '" class="pure-input-2-3" readonly />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="IBAN' + contador + '" class="form-field__label">IBAN</label>' +
+    '<input type="text" id="IBAN' + contador + '" name="IBAN' + contador + '" class="pure-input-2-3" readonly />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="Ustrd' + contador + '" class="form-field__label">Concepto</label>' +
+    '<input type="text" id="Ustrd' + contador + '" name="Ustrd' + contador + '" class="pure-input-2-3" />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="InstdAmt' + contador + '" class="form-field__label">Importe (€)</label>' +
+    '<input type="text" id="InstdAmt' + contador + '" name="InstdAmt' + contador + '" class="pure-input-2-3" />' +
+    '</div>' +
+    '</div>' +
+    ''
+
+    const nuevoRecibo = document.createElement('div')
+    nuevoRecibo.classList.add('recibo')
+    nuevoRecibo.setAttribute('contador', contador)
+    nuevoRecibo.innerHTML = formRecibo
+
+    document.getElementById('recibosRemesaLista').append(nuevoRecibo)
+}
+
+document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
+    e.preventDefault()
+    console.log('Submit Añadir remesa nueva')
+    const data = new FormData(e.target)
+    // console.log('data', data)
+    const dataObject = Object.fromEntries(data.entries())
+    console.log('dataObject', dataObject)
+    // data.forEach((value, key) => {
+    //     console.log(`${key}: ${value}`)
+    // })
+}

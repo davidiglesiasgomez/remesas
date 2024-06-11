@@ -78,35 +78,33 @@
         <section id="nueva">
             <h2>Actualizar los Datos del Emisor</h2>
             <form id="nuevaRemesaForm" method="post" class="pure-form pure-form-stacked">
-                <input type="hidden" id="InitgPtyNm" />
-                <input type="hidden" id="InitgPtyId" />
-                <input type="hidden" id="CdtrAcct" />
-                <input type="hidden" id="CdtrAgtBIC" />
+                <input type="hidden" id="InitgPtyNm" name="InitgPtyNm" />
+                <input type="hidden" id="InitgPtyId" name="InitgPtyId" />
+                <input type="hidden" id="CdtrAcct" name="CdtrAcct" />
+                <input type="hidden" id="CdtrAgtBIC" name="CdtrAgtBIC" />
+                <input type="hidden" id="MessageID" name="MessageID" />
+                <input type="hidden" id="CreationDate" name="CreationDate" />
                 <fieldset>
                     <legend>Datos de la Remesa</legend>
                     <div class="form-field">
-                        <input id="RemesaIDPicker" type="hidden" />
-                        <label for="RemesaID" class="form-field__label">Identificador de la Remesa</label>
-                        <input  type="text" id="RemesaID" class="pure-input-2-3" /><button type="button" id="RemesaIDBtn">📅</button>
-                    </div>
-                    <div class="form-field">
-                        <label for="MessageID" class="form-field__label">Identificador del Mensaje</label>
-                        <input type="text" id="MessageID" class="pure-input-2-3" readonly />
-                    </div>
-                    <div class="form-field">
-                        <label for="CreationDate" class="form-field__label">Fecha de Creación</label>
-                        <input type="text" id="CreationDate" class="pure-input-2-3" readonly />
+                        <input id="FicheroIDPicker" name="FicheroIDPicker" type="hidden" />
+                        <label for="FicheroID" class="form-field__label">Fichero de la Remesa <button type="button" id="FicheroIDBtn">📅</button></label>
+                        <input type="text" id="FicheroID" name="FicheroID" class="pure-input-2-3" readonly />
                     </div>
                     <div class="form-field">
                         <label for="NumRows" class="form-field__label">Número de adeudos</label>
-                        <input type="text" id="NumRows" class="pure-input-2-3" readonly />
+                        <input type="text" id="NumRows" name="NumRows" class="pure-input-2-3" value="0" readonly />
                     </div>
                     <div class="form-field">
                         <label for="CtrlSum" class="form-field__label">Control de suma</label>
-                        <input type="text" id="CtrlSum" class="pure-input-2-3" readonly />
+                        <input type="text" id="CtrlSum" name="CtrlSum" class="pure-input-2-3" value="0,00" readonly />
                     </div>
+                    <legend>Lista de Recibos</legend>
+                    <input type="hidden" id="contadorRecibosRemesa" value="0" />
+                    <div id="recibosRemesaLista"></div>
                     <label />
-                    <button id="nuevaRemesaBtn" type="submit" class="pure-button pure-button-primary">Añadir</button>
+                    <button id="nuevoReciboBtn" type="button" class="pure-button pure-button-primary">Añadir recibo</button>
+                    <button id="nuevaRemesaBtn" type="submit" class="pure-button pure-button-primary">Añadir remesa</button>
                 </fieldset>
             </form>
         </section>
