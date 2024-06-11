@@ -75,7 +75,7 @@ function parseCSV(text, columns) {
     const lines = text.split('\n').map(line => line.trim()).filter(line => line);
     return lines.slice(1).map(line => {
         const values = line.split(';').map(value => value.trim());
-        return Object.keys(columns).reduce((object, column, index) => {
+        return columns.reduce((object, column, index) => {
             object[column] = values[index] || '';
             return object;
         }, {});
