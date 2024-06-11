@@ -41,7 +41,7 @@
             <h2>Actualizar los Datos del Emisor</h2>
             <form id="updateEmisorForm" method="post" class="pure-form pure-form-stacked">
                 <fieldset>
-                    <legend>Datis del Emisor</legend>
+                    <legend>Datos del Emisor</legend>
                     <label for="InitgPtyNm">Nombre del Emisor</label>
                     <input type="texto" id="InitgPtyNm" class="pure-input-2-3" />
                     <label for="InitgPtyId">Id del Emisor</label>
@@ -70,6 +70,27 @@
         <section id="clientes">
             <h2>Listado de Clientes</h2>
             <div id="dataClientesContainer"></div>
+        </section>
+
+        <section id="nueva">
+            <h2>Actualizar los Datos del Emisor</h2>
+            <form id="nuevaRemesaForm" method="post" class="pure-form pure-form-stacked">
+                <fieldset>
+                    <legend>Datos de la Remesa</legend>
+                    <label for="RemesaID">Identificador de la Remesa</label>
+                    <input type="texto" id="RemesaID" class="pure-input-2-3" />
+                    <label for="MessageID">Identificador del Mensaje</label>
+                    <input type="texto" id="MessageID" class="pure-input-2-3" readonly />
+                    <label for="CreationDate">Fecha de Creación</label>
+                    <input type="texto" id="CreationDate" class="pure-input-2-3" readonly />
+                    <label for="NumRows">Número de adeudos</label>
+                    <input type="texto" id="NumRows" class="pure-input-2-3" readonly />
+                    <label for="CtrlSum">Control de suma</label>
+                    <input type="texto" id="CtrlSum" class="pure-input-2-3" readonly />
+                    <label />
+                    <button id="nuevaRemesaBtn" type="submit" class="pure-button pure-button-primary">Añadir</button>
+                </fieldset>
+            </form>
         </section>
     </main>
 </div>
