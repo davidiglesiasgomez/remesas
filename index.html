@@ -42,14 +42,14 @@
             <form id="updateEmisorForm" method="post" class="pure-form pure-form-stacked">
                 <fieldset>
                     <legend>Datos del Emisor</legend>
-                    <label for="InitgPtyNm">Nombre del Emisor</label>
-                    <input type="texto" id="InitgPtyNm" class="pure-input-2-3" />
-                    <label for="InitgPtyId">Id del Emisor</label>
-                    <input type="texto" id="InitgPtyId" class="pure-input-2-3" />
-                    <label for="CdtrAcct">Cuenta de Abono del Emisor</label>
-                    <input type="texto" id="CdtrAcct" class="pure-input-2-3" />
-                    <label for="CdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
-                    <input type="texto" id="CdtrAgtBIC" class="pure-input-2-3" />
+                    <label for="EmisorInitgPtyNm">Nombre del Emisor</label>
+                    <input type="texto" id="EmisorInitgPtyNm" class="pure-input-2-3" />
+                    <label for="EmisorInitgPtyId">Id del Emisor</label>
+                    <input type="texto" id="EmisorInitgPtyId" class="pure-input-2-3" />
+                    <label for="EmisorCdtrAcct">Cuenta de Abono del Emisor</label>
+                    <input type="texto" id="EmisorCdtrAcct" class="pure-input-2-3" />
+                    <label for="EmisorCdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
+                    <input type="texto" id="EmisorCdtrAgtBIC" class="pure-input-2-3" />
                     <label />
                     <button id="updateEmisorBtn" type="submit" class="pure-button pure-button-primary">Actualizar</button>
                 </fieldset>
@@ -75,6 +75,10 @@
         <section id="nueva">
             <h2>Actualizar los Datos del Emisor</h2>
             <form id="nuevaRemesaForm" method="post" class="pure-form pure-form-stacked">
+                <input type="hidden" id="InitgPtyNm" />
+                <input type="hidden" id="InitgPtyId" />
+                <input type="hidden" id="CdtrAcct" />
+                <input type="hidden" id="CdtrAgtBIC" />
                 <fieldset>
                     <legend>Datos de la Remesa</legend>
                     <label for="RemesaID">Identificador de la Remesa</label>

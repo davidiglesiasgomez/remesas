@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
         displayClientesData(storedClientesData, headersClientes);
     }
     if (storedEmisorData) {
+        document.getElementById('EmisorInitgPtyNm').value = storedEmisorData.InitgPtyNm || ''
+        document.getElementById('EmisorInitgPtyId').value = storedEmisorData.InitgPtyId || ''
+        document.getElementById('EmisorCdtrAcct').value = storedEmisorData.CdtrAcct || ''
+        document.getElementById('EmisorCdtrAgtBIC').value = storedEmisorData.CdtrAgtBIC || ''
         document.getElementById('InitgPtyNm').value = storedEmisorData.InitgPtyNm || ''
         document.getElementById('InitgPtyId').value = storedEmisorData.InitgPtyId || ''
         document.getElementById('CdtrAcct').value = storedEmisorData.CdtrAcct || ''
@@ -196,10 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Manejar la actualización de datos del emisor
 document.getElementById('updateEmisorForm').addEventListener('submit', function(e) {
     e.preventDefault()
-    const InitgPtyNm = document.getElementById('InitgPtyNm').value
-    const InitgPtyId = document.getElementById('InitgPtyId').value
-    const CdtrAcct = document.getElementById('CdtrAcct').value
-    const CdtrAgtBIC = document.getElementById('CdtrAgtBIC').value
+    const InitgPtyNm = document.getElementById('EmisorInitgPtyNm').value
+    const InitgPtyId = document.getElementById('EmisorInitgPtyId').value
+    const CdtrAcct = document.getElementById('EmisorCdtrAcct').value
+    const CdtrAgtBIC = document.getElementById('EmisorCdtrAgtBIC').value
     const data = {
         'InitgPtyNm': InitgPtyNm,
         'InitgPtyId': InitgPtyId,
