@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestor de remesas">
+    <title>Gestor de remesas</title>
+    <link rel="stylesheet" href="assets/pure-min.css">
+    <link rel="stylesheet" href="assets/pure-styles.css">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div id="layout">
+
+    <a href="#menu" id="menuLink" class="menu-link"> <!-- Menu toggle -->
+        <span></span> <!-- Hamburger icon -->
+    </a>
+
+    <nav id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="#home">Gestor de Remesas</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="#remesas" class="pure-menu-link">Listado de Remesas</a></li>
+                <li class="pure-menu-item"><a href="#clientes" class="pure-menu-link">Listado de Clientes</a></li>
+                <li class="pure-menu-item"><a href="#subir" class="pure-menu-link">Actualizar Clientes</a></li>
+                <li class="pure-menu-item"><a href="#emisor" class="pure-menu-link">Datos Emisor</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home">
+            <h2>Introducción</h2>
+            <p>Bienvenido a Gestor de remesas, una aplicación para generar ficheros de remesas.</p>
+        </section>
+
+        <section id="emisor">
+            <h2>Actualizar los datos del Emisor</h2>
+            <form id="updateEmisorForm" method="post" class="pure-form pure-form-stacked">
+                <fieldset>
+                    <legend>Legend</legend>
+                    <label for="InitgPtyNm">Nombre del Emisor</label>
+                    <input type="texto" id="InitgPtyNm" class="pure-input-2-3" />
+                    <label for="InitgPtyId">Id del Emisor</label>
+                    <input type="texto" id="InitgPtyId" class="pure-input-2-3" />
+                    <label for="CdtrAcct">Cuenta de Abono del Emisor</label>
+                    <input type="texto" id="CdtrAcct" class="pure-input-2-3" />
+                    <label for="CdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
+                    <input type="texto" id="CdtrAgtBIC" class="pure-input-2-3" />
+                    <label />
+                    <button id="updateEmisorBtn" type="submit" class="pure-button pure-button-primary">Actualizar</button>
+                </fieldset>
+            </form>
+        </section>
+
+        <section id="remesas">
+            <h2>Listado de Remesas</h2>
+            <div id="dataRemesasContainer"></div>
+        </section>
+
+        <section id="subir">
+            <h2>Actualizar el listado de Clientes</h2>
+            <input type="file" id="fileClientesInput" accept=".csv" />
+            <button id="uploadClientesBtn">Subir</button>
+        </section>
+
+        <section id="clientes">
+            <h2>Listado de Clientes</h2>
+            <div id="dataClientesContainer"></div>
+        </section>
+    </main>
+</div>
+
+<script src="assets/pure-ui.js"></script>
+<script src="assets/script.js"></script>
+
+</body>
+</html>
