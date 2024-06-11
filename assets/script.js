@@ -213,3 +213,16 @@ document.getElementById('updateEmisorForm').addEventListener('submit', function(
     const item = 'emisor'
     saveData(data, item)
 });
+
+const remesaIdPicker = MCDatepicker.create({
+    el: '#RemesaIDPicker',
+    bodyType: 'modal',
+    dateFormat: 'dd mm yy',
+    autoClose: true,
+    closeOndblclick: true,
+    closeOnBlur: true
+});
+remesaIdPicker.onSelect((date, formatedDate) => {
+    document.getElementById('RemesaID').value = 'R' + formatedDate.replaceAll(' ', '')
+});
+document.getElementById('RemesaIDBtn').onclick = () => remesaIdPicker.open();

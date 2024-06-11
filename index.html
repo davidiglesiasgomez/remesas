@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Gestor de remesas">
     <title>Gestor de remesas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="assets/pure-min.css">
     <link rel="stylesheet" href="assets/pure-styles.css">
     <link rel="stylesheet" href="assets/styles.css">
@@ -43,13 +46,13 @@
                 <fieldset>
                     <legend>Datos del Emisor</legend>
                     <label for="EmisorInitgPtyNm">Nombre del Emisor</label>
-                    <input type="texto" id="EmisorInitgPtyNm" class="pure-input-2-3" />
+                    <input type="text" id="EmisorInitgPtyNm" class="pure-input-2-3" />
                     <label for="EmisorInitgPtyId">Id del Emisor</label>
-                    <input type="texto" id="EmisorInitgPtyId" class="pure-input-2-3" />
+                    <input type="text" id="EmisorInitgPtyId" class="pure-input-2-3" />
                     <label for="EmisorCdtrAcct">Cuenta de Abono del Emisor</label>
-                    <input type="texto" id="EmisorCdtrAcct" class="pure-input-2-3" />
+                    <input type="text" id="EmisorCdtrAcct" class="pure-input-2-3" />
                     <label for="EmisorCdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
-                    <input type="texto" id="EmisorCdtrAgtBIC" class="pure-input-2-3" />
+                    <input type="text" id="EmisorCdtrAgtBIC" class="pure-input-2-3" />
                     <label />
                     <button id="updateEmisorBtn" type="submit" class="pure-button pure-button-primary">Actualizar</button>
                 </fieldset>
@@ -81,16 +84,27 @@
                 <input type="hidden" id="CdtrAgtBIC" />
                 <fieldset>
                     <legend>Datos de la Remesa</legend>
-                    <label for="RemesaID">Identificador de la Remesa</label>
-                    <input type="texto" id="RemesaID" class="pure-input-2-3" />
-                    <label for="MessageID">Identificador del Mensaje</label>
-                    <input type="texto" id="MessageID" class="pure-input-2-3" readonly />
-                    <label for="CreationDate">Fecha de Creación</label>
-                    <input type="texto" id="CreationDate" class="pure-input-2-3" readonly />
-                    <label for="NumRows">Número de adeudos</label>
-                    <input type="texto" id="NumRows" class="pure-input-2-3" readonly />
-                    <label for="CtrlSum">Control de suma</label>
-                    <input type="texto" id="CtrlSum" class="pure-input-2-3" readonly />
+                    <div class="form-field">
+                        <input id="RemesaIDPicker" type="hidden" />
+                        <label for="RemesaID" class="form-field__label">Identificador de la Remesa</label>
+                        <input  type="text" id="RemesaID" class="pure-input-2-3" /><button type="button" id="RemesaIDBtn">📅</button>
+                    </div>
+                    <div class="form-field">
+                        <label for="MessageID" class="form-field__label">Identificador del Mensaje</label>
+                        <input type="text" id="MessageID" class="pure-input-2-3" readonly />
+                    </div>
+                    <div class="form-field">
+                        <label for="CreationDate" class="form-field__label">Fecha de Creación</label>
+                        <input type="text" id="CreationDate" class="pure-input-2-3" readonly />
+                    </div>
+                    <div class="form-field">
+                        <label for="NumRows" class="form-field__label">Número de adeudos</label>
+                        <input type="text" id="NumRows" class="pure-input-2-3" readonly />
+                    </div>
+                    <div class="form-field">
+                        <label for="CtrlSum" class="form-field__label">Control de suma</label>
+                        <input type="text" id="CtrlSum" class="pure-input-2-3" readonly />
+                    </div>
                     <label />
                     <button id="nuevaRemesaBtn" type="submit" class="pure-button pure-button-primary">Añadir</button>
                 </fieldset>
@@ -99,6 +113,7 @@
     </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"></script>
 <script src="assets/pure-ui.js"></script>
 <script src="assets/script.js"></script>
 
