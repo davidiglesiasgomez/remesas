@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
+            const targetId = this.getAttribute('href').substring(1)
             // Ocultar todas las secciones excepto la seleccionada
             sections.forEach(section => {
                 if (section.id === targetId) {
@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     section.style.display = 'none';
                 }
             });
+            navLinks.forEach(link => {
+                link.parentElement.classList.remove('pure-menu-selected')
+            });
+            this.parentElement.classList.add('pure-menu-selected')
         });
     });
 });
