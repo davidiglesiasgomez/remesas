@@ -80,3 +80,12 @@ table.pure-table tbody tr:nth-child(odd) {
         left: 250px;
     }
 }
+
+/* Input file */
+div.inputFileWrap {
+    display: inline-block;
+}
+
+div.inputFileWrap input[type="file"] {
+    display: none;
+}

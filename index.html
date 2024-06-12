@@ -66,8 +66,11 @@
 
         <section id="subir">
             <h2>Actualizar el Listado de Clientes</h2>
-            <input type="file" id="fileClientesInput" accept=".csv" />
-            <button id="uploadClientesBtn">Subir</button>
+            <div class="inputFileWrap">
+                <label class="pure-button pure-button-primary" for="fileClientesInput">Seleccionar Fichero</label>
+                <input id="fileClientesInput" type="file" >
+            </div>
+            <button type="submit" id="uploadClientesBtn" class="pure-button pure-button-primary">Subir</button>
         </section>
 
         <section id="clientes">
