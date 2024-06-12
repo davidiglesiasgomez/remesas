@@ -56,7 +56,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Manejar la subida de archivos
+document.getElementById('fileClientesInput').addEventListener('click', function() {
+    const progressBarClientesContainer = document.getElementById('progressBarClientesContainer');
+    progressBarClientesContainer.innerHTML = ''
+})
+
 document.getElementById('uploadClientesBtn').addEventListener('click', function() {
+
+    const progressBarClientesContainer = document.getElementById('progressBarClientesContainer');
+    var progressBarClientesCounter = 0
+    var progressBarClientesInterval = setInterval(() => {
+        progressBar(progressBarClientesContainer, progressBarClientesCounter++, 'Subiendo archivo...')
+        if (progressBarClientesCounter > 100) clearInterval(progressBarClientesInterval)
+    }, 50)
+
     const fileClientesInput = document.getElementById('fileClientesInput');
     const file = fileClientesInput.files[0];
     if (file) {
@@ -66,6 +79,12 @@ document.getElementById('uploadClientesBtn').addEventListener('click', function(
             const data = parseCSV(text, ['nombre', 'iban', 'dato desconocido 1', 'domicilio', 'código postal y localidad', 'provincia', 'código de país', 'dato desconocido2', 'nif', 'fecha de inserción']);
             saveData(data, 'clientes');
             displayClientesData(data, headersClientes);
+
+            clearInterval(progressBarClientesInterval)
+            progressBarClientesInterval = setInterval(() => {
+                progressBar(progressBarClientesContainer, progressBarClientesCounter++, 'Subiendo archivo...')
+                if (progressBarClientesCounter > 100) clearInterval(progressBarClientesInterval)
+            }, 1)
         };
         reader.readAsText(file);
     }
@@ -293,4 +312,19 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     // data.forEach((value, key) => {
     //     console.log(`${key}: ${value}`)
     // })
+}
+
+function progressBar(parentElement, progress, text)
+{
+    progress = progress || 0
+    progress = ( progress > 100 ? 100 : progress )
+    text = text || ''
+    const progressBar = '' +
+    '<div class="progressBarWrap">' +
+    '<div class="progress-bar">' +
+    '<span class="progress-bar-fill" style="width: ' + progress + '%;"></span>' +
+    '</div>' +
+    '</div>' +
+    ''
+    parentElement.innerHTML = progressBar
 }
