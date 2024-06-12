@@ -5,12 +5,16 @@ const headersClientes = {
     'fecha de inserción': 'Fecha de Inserción'
 };
 
+var storedClientesData = []
+var storedRemesasData = []
+var storedEmisorData = {}
+
 // Esperamos a que el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
     // Mostrar los datos almacenados si existen
-    const storedClientesData = JSON.parse(localStorage.getItem('clientes'));
-    const storedRemesasData = JSON.parse(localStorage.getItem('remesas'));
-    const storedEmisorData = JSON.parse(localStorage.getItem('emisor'));
+    storedClientesData = JSON.parse(localStorage.getItem('clientes'));
+    storedRemesasData = JSON.parse(localStorage.getItem('remesas'));
+    storedEmisorData = JSON.parse(localStorage.getItem('emisor'));
     if (storedClientesData) {
         displayClientesData(storedClientesData, headersClientes);
     }
@@ -255,8 +259,8 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<p>Recibo #' + contador + '</p>' +
     '<div class="recibo">' +
     '<div class="form-field">' +
-    '<label for="MndtId' + contador + '" class="form-field__label">Identificador</label>' +
-    '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="pure-input-2-3" />' +
+    '<label for="MndtId' + contador + '" class="">Identificador</label>' +
+    '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="" />' +
     '</div>' +
     '<div class="form-field">' +
     '<label for="DtOfSgntr' + contador + '" class="form-field__label">Fecha de Firma</label>' +
@@ -300,11 +304,35 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     nuevoRecibo.innerHTML = formRecibo
 
     document.getElementById('recibosRemesaLista').append(nuevoRecibo)
+
+    new autoComplete({
+        selector: () => {return document.getElementById("MndtId" + contador)},
+        placeHolder: "Buscar Deudor...",
+        data: {
+            src: storedClientesData,
+            keys: ["nif", "nombre", "iban"],
+        },
+        resultItem: {
+            highlight: true,
+        }
+    })
+    document.getElementById("MndtId" + contador).addEventListener("selection", function (event) {
+        if (!event.detail.selection.value) {
+            return
+        }
+        document.getElementById("MndtId" + contador).value = event.detail.selection.value.nif
+        document.getElementById("DtOfSgntr" + contador).value = event.detail.selection.value["fecha de inserción"]
+        document.getElementById("Nm" + contador).value = event.detail.selection.value.nombre
+        document.getElementById("Ctry" + contador).value = event.detail.selection.value["código de país"]
+        document.getElementById("AdrLine1_" + contador).value = event.detail.selection.value.domicilio
+        document.getElementById("AdrLine2_" + contador).value = event.detail.selection.value["código postal y localidad"]
+        document.getElementById("IBAN" + contador).value = event.detail.selection.value.iban
+    })
 }
 
 document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     e.preventDefault()
-    console.log('Submit Añadir remesa nueva')
+    console.log('Submit Añadir Remesa Nueva')
     const data = new FormData(e.target)
     // console.log('data', data)
     const dataObject = Object.fromEntries(data.entries())
