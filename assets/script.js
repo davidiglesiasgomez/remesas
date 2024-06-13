@@ -263,35 +263,42 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
     '<input type="text" id="Identificador' + contador + '" name="Identificador' + contador + '" class="pure-input-2-3" />' +
     '</div>' +
-    '<div class="form-field">' +
-    '<label for="MndtId' + contador + '" class="form-field__label">Identificador de Mandato</label>' +
-    '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
-    '<div class="form-field">' +
-    '<label for="DtOfSgntr' + contador + '" class="form-field__label">Fecha de Firma</label>' +
-    '<input type="text" id="DtOfSgntr' + contador + '" name="DtOfSgntr' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
-    '<input type="hidden" id="AmdmntInd' + contador + '" name="AmdmntInd' + contador + '" />' +
-    '<div class="form-field">' +
-    '<label for="Nm' + contador + '" class="form-field__label">Nombre</label>' +
-    '<input type="text" id="Nm' + contador + '" name="Nm' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
-    '<div class="form-field">' +
-    '<label for="Ctry' + contador + '" class="form-field__label">País</label>' +
-    '<input type="text" id="Ctry' + contador + '" name="Ctry' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
-    '<div class="form-field">' +
-    '<label for="AdrLine1_' + contador + '" class="form-field__label">Dirección</label>' +
-    '<input type="text" id="AdrLine1_' + contador + '" name="AdrLine1_' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
-    '<div class="form-field">' +
-    '<label for="AdrLine2_' + contador + '" class="form-field__label">Dirección</label>' +
-    '<input type="text" id="AdrLine2_' + contador + '" name="AdrLine2_' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
-    '<div class="form-field">' +
-    '<label for="IBAN' + contador + '" class="form-field__label">IBAN</label>' +
-    '<input type="text" id="IBAN' + contador + '" name="IBAN' + contador + '" class="pure-input-2-3" readonly />' +
-    '</div>' +
+    // '<div class="form-field">' +
+    // '<label for="MndtId' + contador + '" class="form-field__label">Identificador de Mandato</label>' +
+    // '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    // '<div class="form-field">' +
+    // '<label for="DtOfSgntr' + contador + '" class="form-field__label">Fecha de Firma</label>' +
+    // '<input type="text" id="DtOfSgntr' + contador + '" name="DtOfSgntr' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    // '<input type="hidden" id="AmdmntInd' + contador + '" name="AmdmntInd' + contador + '" />' +
+    // '<div class="form-field">' +
+    // '<label for="Nm' + contador + '" class="form-field__label">Nombre</label>' +
+    // '<input type="text" id="Nm' + contador + '" name="Nm' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    // '<div class="form-field">' +
+    // '<label for="Ctry' + contador + '" class="form-field__label">País</label>' +
+    // '<input type="text" id="Ctry' + contador + '" name="Ctry' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    // '<div class="form-field">' +
+    // '<label for="AdrLine1_' + contador + '" class="form-field__label">Dirección</label>' +
+    // '<input type="text" id="AdrLine1_' + contador + '" name="AdrLine1_' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    // '<div class="form-field">' +
+    // '<label for="AdrLine2_' + contador + '" class="form-field__label">Dirección</label>' +
+    // '<input type="text" id="AdrLine2_' + contador + '" name="AdrLine2_' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    // '<div class="form-field">' +
+    // '<label for="IBAN' + contador + '" class="form-field__label">IBAN</label>' +
+    // '<input type="text" id="IBAN' + contador + '" name="IBAN' + contador + '" class="pure-input-2-3" readonly />' +
+    // '</div>' +
+    '<input type="hidden" id="MndtId' + contador + '" name="MndtId' + contador + '" />' +
+    '<input type="hidden" id="DtOfSgntr' + contador + '" name="DtOfSgntr' + contador + '" />' +
+    '<input type="hidden" id="Nm' + contador + '" name="Nm' + contador + '" />' +
+    '<input type="hidden" id="Ctry' + contador + '" name="Ctry' + contador + '" />' +
+    '<input type="hidden" id="AdrLine1_' + contador + '" name="AdrLine1_' + contador + '" />' +
+    '<input type="hidden" id="AdrLine2_' + contador + '" name="AdrLine2_' + contador + '" />' +
+    '<input type="hidden" id="IBAN' + contador + '" name="IBAN' + contador + '" />' +
     '<div class="form-field">' +
     '<label for="Ustrd' + contador + '" class="form-field__label">Concepto' + '&nbsp;' +
     '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'auto\', ' + contador + ')">🚗 Auto</button>' + '&nbsp;' +
