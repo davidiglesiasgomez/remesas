@@ -265,7 +265,8 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     const contador = parseInt(document.getElementById('contadorRecibosRemesa').value)
 
     const formRecibo = '' +
-    '<p>Recibo #' + contador + '</p>' +
+    '<div id="Recibo' + contador + '">' +
+    '<p>Recibo #' + contador + ' <button type="button" class="pure-button" onclick="if (confirm(\'¿Está seguro que quiere eliminar el recibo?\')) document.getElementById(\'Recibo' + contador + '\').remove()">🗑️</button></p>' +
     '<div class="recibo">' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
@@ -292,6 +293,7 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<div class="form-field">' +
     '<label for="InstdAmt' + contador + '" class="form-field__label">Importe (€)</label>' +
     '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" class="pure-input-2-3" />' +
+    '</div>' +
     '</div>' +
     '</div>' +
     ''
