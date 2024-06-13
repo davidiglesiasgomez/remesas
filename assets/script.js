@@ -223,14 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Manejar la actualización de datos del emisor
 document.getElementById('updateEmisorForm').addEventListener('submit', function(e) {
     e.preventDefault()
-
-    const progressBarEmisorContainer = document.getElementById('progressBarEmisorContainer');
-    var progressBarEmisorCounter = 0
-    var progressBarEmisorInterval = setInterval(() => {
-        progressBar(progressBarEmisorContainer, progressBarEmisorCounter++, 'Actualizando datos...')
-        if (progressBarEmisorCounter > 100) clearInterval(progressBarEmisorInterval)
-    }, 1)
-
     const InitgPtyNm = document.getElementById('EmisorInitgPtyNm').value
     const InitgPtyId = document.getElementById('EmisorInitgPtyId').value
     const CdtrAcct = document.getElementById('EmisorCdtrAcct').value
@@ -243,6 +235,7 @@ document.getElementById('updateEmisorForm').addEventListener('submit', function(
     }
     const item = 'emisor'
     saveData(data, item)
+    showToast("Datos grabados correctamente", "success", 5000);
 });
 
 const ficheroIdPicker = MCDatepicker.create({
@@ -395,6 +388,8 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
         }
     })
     // console.log('data', data)
+
+    showToast("Es necesario rellenar todos los datos", "danger", 5000);
 }
 
 function progressBar(parentElement, progress, text)
@@ -413,8 +408,6 @@ function progressBar(parentElement, progress, text)
 }
 
 document.getElementById('navEmisorBtn').addEventListener('click', function(e) {
-    const progressBarEmisorContainer = document.getElementById('progressBarEmisorContainer');
-    progressBarEmisorContainer.innerHTML = ''
 })
 
 document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
@@ -444,3 +437,47 @@ function recalcularTotalRecibos()
     document.getElementById('CtrlSum').value = total
     document.getElementById('NumRows').value = numero
 }
+
+let icon = {
+    success:
+    '<span class="">✔️</span>',
+    danger:
+    '<span class="">❌</span>',
+    warning:
+    '<span class="">⚠️</span>',
+    info:
+    '<span class="">ℹ️</span>',
+};
+
+const showToast = (
+    message = "Sample Message",
+    toastType = "info",
+    duration = 5000) => {
+    if (!Object.keys(icon).includes(toastType)) {
+        toastType = "info"
+    }
+
+    let box = document.createElement("div")
+    box.classList.add("toast", `toast-${toastType}`)
+    box.innerHTML = ` <div class="toast-content-wrapper">
+                      <div class="toast-icon">
+                      ${icon[toastType]}
+                      </div>
+                      <div class="toast-message">${message}</div>
+                      <div class="toast-progress"></div>
+                      </div>`
+    duration = duration || 5000
+    box.querySelector(".toast-progress").style.animationDuration = `${duration / 1000}s`
+
+    document.getElementById('toast-overlay').appendChild(box)
+
+    setTimeout(() => {
+        box.remove()
+    }, duration)
+}
+
+// Toast
+// showToast("Article Submitted Successfully", "success", 5000);
+// showToast("Do POTD and Earn Coins", "info", 5000);
+// showToast("Failed unexpected error", "danger", 5000);
+// showToast("!warning! server error", "warning", 5000);
