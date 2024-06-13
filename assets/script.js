@@ -265,8 +265,7 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     const contador = parseInt(document.getElementById('contadorRecibosRemesa').value)
 
     const formRecibo = '' +
-    '<div id="Recibo' + contador + '" class="recibo">' +
-    '<p>Recibo #' + contador + ' <button type="button" class="" onclick="if (confirm(\'¿Está seguro que quiere eliminar el recibo?\')) document.getElementById(\'Recibo' + contador + '\').remove()">🗑️</button></p>' +
+    '<p><span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span> <button type="button" class="" onclick="eliminarRecibo(' + contador + ')">🗑️</button></p>' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
     '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-input-2-3" />' +
@@ -293,12 +292,12 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<label for="InstdAmt' + contador + '" class="form-field__label">Importe (€)</label>' +
     '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" class="pure-input-2-3" />' +
     '</div>' +
-    '</div>' +
     ''
 
     const nuevoRecibo = document.createElement('div')
     nuevoRecibo.classList.add('recibo')
     nuevoRecibo.setAttribute('contador', contador)
+    nuevoRecibo.setAttribute('id', 'Recibo' + contador)
     nuevoRecibo.innerHTML = formRecibo
 
     document.getElementById('recibosRemesaLista').append(nuevoRecibo)
@@ -330,6 +329,8 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
         document.getElementById("AdrLine2_" + contador).value = event.detail.selection.value["código postal y localidad"]
         document.getElementById("IBAN" + contador).value = event.detail.selection.value.iban
     })
+
+    recalcularTotalRecibos()
 }
 
 function rellenarConceptoRemesa(tipo, contador) {
@@ -415,3 +416,31 @@ document.getElementById('navEmisorBtn').addEventListener('click', function(e) {
     const progressBarEmisorContainer = document.getElementById('progressBarEmisorContainer');
     progressBarEmisorContainer.innerHTML = ''
 })
+
+document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
+})
+
+function eliminarRecibo(contador)
+{
+    contador = contador || 0
+    if (!confirm('¿Está seguro que quiere eliminar el recibo?')) {
+        return;
+    }
+    document.getElementById('Recibo' + contador).remove()
+    recalcularTotalRecibos()
+}
+
+function recalcularTotalRecibos()
+{
+    var total = 0.0
+    var numero = 0
+    const recibos = document.querySelectorAll('.recibo')
+    recibos.forEach((recibo) => {
+        const importe = parseFloat(recibo.querySelector('input[name*="[InstdAmt]"]').value || 0.0)
+        total += importe
+        numero += 1
+        recibo.querySelector('span.labelRecibo').textContent = 'Recibo #' + numero
+    })
+    document.getElementById('CtrlSum').value = total
+    document.getElementById('NumRows').value = numero
+}
