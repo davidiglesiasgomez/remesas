@@ -329,6 +329,17 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
         document.getElementById("IBAN" + contador).value = event.detail.selection.value.iban
     })
 
+    var inputInstdAmt = document.getElementById("InstdAmt" + contador)
+    inputInstdAmt.addEventListener('blur', (event) => {
+        recalcularTotalRecibos()
+    })
+    inputInstdAmt.addEventListener('change', (event) => {
+        recalcularTotalRecibos()
+    })
+    inputInstdAmt.addEventListener('input', (event) => {
+        recalcularTotalRecibos()
+    })
+
     recalcularTotalRecibos()
 
     showToast("Recibo añadido", "success", 5000);
