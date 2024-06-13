@@ -269,44 +269,15 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<div class="recibo">' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
-    '<input type="text" id="Identificador' + contador + '" name="Identificador' + contador + '" class="pure-input-2-3" />' +
+    '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-input-2-3" />' +
     '</div>' +
-    // '<div class="form-field">' +
-    // '<label for="MndtId' + contador + '" class="form-field__label">Identificador de Mandato</label>' +
-    // '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    // '<div class="form-field">' +
-    // '<label for="DtOfSgntr' + contador + '" class="form-field__label">Fecha de Firma</label>' +
-    // '<input type="text" id="DtOfSgntr' + contador + '" name="DtOfSgntr' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    // '<input type="hidden" id="AmdmntInd' + contador + '" name="AmdmntInd' + contador + '" />' +
-    // '<div class="form-field">' +
-    // '<label for="Nm' + contador + '" class="form-field__label">Nombre</label>' +
-    // '<input type="text" id="Nm' + contador + '" name="Nm' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    // '<div class="form-field">' +
-    // '<label for="Ctry' + contador + '" class="form-field__label">País</label>' +
-    // '<input type="text" id="Ctry' + contador + '" name="Ctry' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    // '<div class="form-field">' +
-    // '<label for="AdrLine1_' + contador + '" class="form-field__label">Dirección</label>' +
-    // '<input type="text" id="AdrLine1_' + contador + '" name="AdrLine1_' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    // '<div class="form-field">' +
-    // '<label for="AdrLine2_' + contador + '" class="form-field__label">Dirección</label>' +
-    // '<input type="text" id="AdrLine2_' + contador + '" name="AdrLine2_' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    // '<div class="form-field">' +
-    // '<label for="IBAN' + contador + '" class="form-field__label">IBAN</label>' +
-    // '<input type="text" id="IBAN' + contador + '" name="IBAN' + contador + '" class="pure-input-2-3" readonly />' +
-    // '</div>' +
-    '<input type="hidden" id="MndtId' + contador + '" name="MndtId' + contador + '" />' +
-    '<input type="hidden" id="DtOfSgntr' + contador + '" name="DtOfSgntr' + contador + '" />' +
-    '<input type="hidden" id="Nm' + contador + '" name="Nm' + contador + '" />' +
-    '<input type="hidden" id="Ctry' + contador + '" name="Ctry' + contador + '" />' +
-    '<input type="hidden" id="AdrLine1_' + contador + '" name="AdrLine1_' + contador + '" />' +
-    '<input type="hidden" id="AdrLine2_' + contador + '" name="AdrLine2_' + contador + '" />' +
-    '<input type="hidden" id="IBAN' + contador + '" name="IBAN' + contador + '" />' +
+    '<input type="hidden" id="MndtId' + contador + '" name="recibos[' + contador + '][MndtId]" />' +
+    '<input type="hidden" id="DtOfSgntr' + contador + '" name="recibos[' + contador + '][DtOfSgntr]" />' +
+    '<input type="hidden" id="Nm' + contador + '" name="recibos[' + contador + '][Nm]" />' +
+    '<input type="hidden" id="Ctry' + contador + '" name="recibos[' + contador + '][Ctry]" />' +
+    '<input type="hidden" id="AdrLine1_' + contador + '" name="recibos[' + contador + '][AdrLine1_]" />' +
+    '<input type="hidden" id="AdrLine2_' + contador + '" name="recibos[' + contador + '][AdrLine2_]" />' +
+    '<input type="hidden" id="IBAN' + contador + '" name="recibos[' + contador + '][IBAN]" />' +
     '<div class="form-field">' +
     '<label for="Ustrd' + contador + '" class="form-field__label">Concepto' + '&nbsp;' +
     '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'auto\', ' + contador + ')">🚗 Auto</button>' + '&nbsp;' +
@@ -316,11 +287,11 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'salud\', ' + contador + ')">⚕️ Salud</button>' + '&nbsp;' +
     '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'generica\', ' + contador + ')">❔ Genérica</button>' + '&nbsp;' +
     '</label>' +
-    '<input type="text" id="Ustrd' + contador + '" name="Ustrd' + contador + '" class="pure-input-2-3" />' +
+    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-input-2-3" />' +
     '</div>' +
     '<div class="form-field">' +
     '<label for="InstdAmt' + contador + '" class="form-field__label">Importe (€)</label>' +
-    '<input type="text" id="InstdAmt' + contador + '" name="InstdAmt' + contador + '" class="pure-input-2-3" />' +
+    '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" class="pure-input-2-3" />' +
     '</div>' +
     '</div>' +
     ''
@@ -405,11 +376,24 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     console.log('Submit Añadir Remesa Nueva')
     const data = new FormData(e.target)
     // console.log('data', data)
-    const dataObject = Object.fromEntries(data.entries())
-    console.log('dataObject', dataObject)
-    // data.forEach((value, key) => {
-    //     console.log(`${key}: ${value}`)
-    // })
+    // const dataObject = Object.fromEntries(data.entries())
+    // console.log('dataObject', dataObject)
+    data.forEach((value, key) => {
+        // console.log(`${key}: ${value}`)
+        const keys = key.match(/[^[\]]+/g); // Extrae las claves
+        if (keys.length === 3) {
+            if (!data[keys[0]]) {
+                data[keys[0]] = {};
+            }
+            if (!data[keys[0]][keys[1]]) {
+                data[keys[0]][keys[1]] = {};
+            }
+            data[keys[0]][keys[1]][keys[2]] = value;
+        } else if (keys.length === 1) {
+            data[keys[0]] = value;
+        }
+    })
+    // console.log('data', data)
 }
 
 function progressBar(parentElement, progress, text)
