@@ -247,6 +247,7 @@ const ficheroIdPicker = MCDatepicker.create({
 });
 ficheroIdPicker.onSelect((date, formatedDate) => {
     document.getElementById('FicheroID').value = 'R' + formatedDate.replaceAll(' ', '')
+    document.getElementById('FicheroIDDate').value = date
 });
 document.getElementById('FicheroIDBtn').onclick = () => ficheroIdPicker.open();
 
@@ -292,7 +293,14 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<input type="text" id="IBAN' + contador + '" name="IBAN' + contador + '" class="pure-input-2-3" readonly />' +
     '</div>' +
     '<div class="form-field">' +
-    '<label for="Ustrd' + contador + '" class="form-field__label">Concepto</label>' +
+    '<label for="Ustrd' + contador + '" class="form-field__label">Concepto' + '&nbsp;' +
+    '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'auto\', ' + contador + ')">🚗 Auto</button>' + '&nbsp;' +
+    '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'hogar\', ' + contador + ')">🏠 Hogar</button>' + '&nbsp;' +
+    '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'comunidad\', ' + contador + ')">🏢 Comunidad</button>' + '&nbsp;' +
+    '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'decesos\', ' + contador + ')">⚰️ Decesos</button>' + '&nbsp;' +
+    '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'salud\', ' + contador + ')">⚕️ Salud</button>' + '&nbsp;' +
+    '<button type="button" class="pute-button" onclick="rellenarConceptoRemesa(\'generica\', ' + contador + ')">❔ Genérica</button>' + '&nbsp;' +
+    '</label>' +
     '<input type="text" id="Ustrd' + contador + '" name="Ustrd' + contador + '" class="pure-input-2-3" />' +
     '</div>' +
     '<div class="form-field">' +
@@ -336,6 +344,45 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
         document.getElementById("AdrLine2_" + contador).value = event.detail.selection.value["código postal y localidad"]
         document.getElementById("IBAN" + contador).value = event.detail.selection.value.iban
     })
+}
+
+function rellenarConceptoRemesa(tipo, contador) {
+    tipo = tipo || 'generica'
+    contador = contador || 0
+    var fecha = new Date(document.getElementById('FicheroIDDate').value)
+    var desde = fecha.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    })
+    fecha.setFullYear(fecha.getFullYear() + 1);
+    var hasta = fecha.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    })
+    var concepto = ''
+    switch (tipo) {
+        case 'auto':
+            concepto = 'SEGURO AUTO / VALIDO DESDE ' + desde + ' HASTA ' + hasta + ' / POLIZA X-XX-######### / MATRICULA #### XXX'
+            break
+        case 'hogar':
+            concepto = 'SEGURO HOGAR / VALIDO DESDE ' + desde + ' HASTA ' + hasta + ' / POLIZA X-XX-######### / DOMICILIO RIESGO '
+            break
+        case 'comunidad':
+            concepto = 'SEGURO COMUNIDAD / VALIDO DESDE ' + desde + ' HASTA ' + hasta + ' / POLIZA X-XX-#########'
+            break
+        case 'decesos':
+            concepto = 'SEGURO DECESOS / VALIDO DESDE ' + desde + ' HASTA ' + hasta + ' / POLIZA X-XX-#########'
+            break
+        case 'salud':
+            concepto = 'SEGURO SALUD / VALIDO DESDE ' + desde + ' HASTA ' + hasta + ' / POLIZA X-XX-#########'
+            break
+        default:
+            concepto = 'SEGURO / VALIDO DESDE ' + desde + ' HASTA ' + hasta + ' / POLIZA X-XX-#########'
+            break
+    }
+    document.getElementById('Ustrd' + contador).value = concepto
 }
 
 document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
