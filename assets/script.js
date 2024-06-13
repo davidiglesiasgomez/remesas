@@ -254,6 +254,12 @@ document.getElementById('FicheroIDBtn').onclick = () => ficheroIdPicker.open();
 
 document.getElementById('nuevoReciboBtn').onclick = (e) => {
     e.preventDefault()
+
+    if (!document.getElementById('FicheroID').value) {
+        showToast("Es imprescindible indicar el fichero de remesa", "danger", 5000);
+        return;
+    }
+
     document.getElementById('contadorRecibosRemesa').value = 1 + parseInt(document.getElementById('contadorRecibosRemesa').value)
     const contador = parseInt(document.getElementById('contadorRecibosRemesa').value)
 
@@ -324,6 +330,8 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     })
 
     recalcularTotalRecibos()
+
+    showToast("Recibo añadido", "success", 5000);
 }
 
 function rellenarConceptoRemesa(tipo, contador) {
@@ -421,6 +429,7 @@ function eliminarRecibo(contador)
     }
     document.getElementById('Recibo' + contador).remove()
     recalcularTotalRecibos()
+    showToast("Recibo eliminado", "success", 5000);
 }
 
 function recalcularTotalRecibos()
