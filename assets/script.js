@@ -259,8 +259,12 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<p>Recibo #' + contador + '</p>' +
     '<div class="recibo">' +
     '<div class="form-field">' +
-    '<label for="MndtId' + contador + '" class="">Identificador</label>' +
-    '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="" />' +
+    '<label for="Identificador' + contador + '" class="">Cliente</label>' +
+    '<input type="text" id="Identificador' + contador + '" name="Identificador' + contador + '" class="pure-input-2-3" />' +
+    '</div>' +
+    '<div class="form-field">' +
+    '<label for="MndtId' + contador + '" class="form-field__label">Identificador de Mandato</label>' +
+    '<input type="text" id="MndtId' + contador + '" name="MndtId' + contador + '" class="pure-input-2-3" readonly />' +
     '</div>' +
     '<div class="form-field">' +
     '<label for="DtOfSgntr' + contador + '" class="form-field__label">Fecha de Firma</label>' +
@@ -268,7 +272,7 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '</div>' +
     '<input type="hidden" id="AmdmntInd' + contador + '" name="AmdmntInd' + contador + '" />' +
     '<div class="form-field">' +
-    '<label for="Nm' + contador + '" class="form-field__label">Nombre del Deudor</label>' +
+    '<label for="Nm' + contador + '" class="form-field__label">Nombre</label>' +
     '<input type="text" id="Nm' + contador + '" name="Nm' + contador + '" class="pure-input-2-3" readonly />' +
     '</div>' +
     '<div class="form-field">' +
@@ -306,20 +310,24 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     document.getElementById('recibosRemesaLista').append(nuevoRecibo)
 
     new autoComplete({
-        selector: () => {return document.getElementById("MndtId" + contador)},
-        placeHolder: "Buscar Deudor...",
+        selector: () => {return document.getElementById("Identificador" + contador)},
+        placeHolder: "Buscar Cliente...",
         data: {
-            src: storedClientesData,
-            keys: ["nif", "nombre", "iban"],
+            src: storedClientesData.map((cliente) => {
+                cliente.key = `${cliente.nif} - ${cliente.nombre} - ${cliente.iban} - ${cliente["fecha de inserción"]}`
+                return cliente
+            }),
+            keys: ["key"],
         },
         resultItem: {
             highlight: true,
         }
     })
-    document.getElementById("MndtId" + contador).addEventListener("selection", function (event) {
+    document.getElementById("Identificador" + contador).addEventListener("selection", function (event) {
         if (!event.detail.selection.value) {
             return
         }
+        document.getElementById("Identificador" + contador).value = event.detail.selection.value.key
         document.getElementById("MndtId" + contador).value = event.detail.selection.value.nif
         document.getElementById("DtOfSgntr" + contador).value = event.detail.selection.value["fecha de inserción"]
         document.getElementById("Nm" + contador).value = event.detail.selection.value.nombre

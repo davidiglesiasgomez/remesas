@@ -113,3 +113,9 @@ div.inputFileWrap input[type="file"] {
     border-radius: 3px;
     transition: width 500ms ease-in-out;
 }
+
+/* Autocomplete */
+
+.autoComplete_wrapper {
+    display: block;
+}
