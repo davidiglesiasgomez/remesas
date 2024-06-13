@@ -29,7 +29,7 @@
                 <li class="pure-menu-item"><a href="#nueva" class="pure-menu-link">Nueva Remesa</a></li>
                 <li class="pure-menu-item"><a href="#clientes" class="pure-menu-link">Listado de Clientes</a></li>
                 <li class="pure-menu-item"><a href="#subir" class="pure-menu-link">Actualizar Clientes</a></li>
-                <li class="pure-menu-item"><a href="#emisor" class="pure-menu-link">Datos Emisor</a></li>
+                <li class="pure-menu-item"><a href="#emisor" id="navEmisorBtn" class="pure-menu-link">Datos Emisor</a></li>
             </ul>
         </div>
     </nav>
@@ -42,6 +42,7 @@
 
         <section id="emisor">
             <h2>Actualizar los Datos del Emisor</h2>
+            <div id="progressBarEmisorContainer"></div>
             <form id="updateEmisorForm" method="post" class="pure-form pure-form-stacked">
                 <fieldset>
                     <legend>Datos del Emisor</legend>
@@ -66,9 +67,7 @@
 
         <section id="subir">
             <h2>Actualizar el Listado de Clientes</h2>
-
             <div id="progressBarClientesContainer"></div>
-
             <div class="inputFileWrap">
                 <label class="pure-button pure-button-primary" for="fileClientesInput">Seleccionar Fichero</label>
                 <input id="fileClientesInput" type="file" >
@@ -82,7 +81,7 @@
         </section>
 
         <section id="nueva">
-            <h2>Actualizar los Datos del Emisor</h2>
+            <h2>Añadir Nueva Remesa</h2>
             <form id="nuevaRemesaForm" method="post" class="pure-form pure-form-stacked">
                 <input type="hidden" id="InitgPtyNm" name="InitgPtyNm" />
                 <input type="hidden" id="InitgPtyId" name="InitgPtyId" />

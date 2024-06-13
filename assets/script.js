@@ -223,6 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // Manejar la actualización de datos del emisor
 document.getElementById('updateEmisorForm').addEventListener('submit', function(e) {
     e.preventDefault()
+
+    const progressBarEmisorContainer = document.getElementById('progressBarEmisorContainer');
+    var progressBarEmisorCounter = 0
+    var progressBarEmisorInterval = setInterval(() => {
+        progressBar(progressBarEmisorContainer, progressBarEmisorCounter++, 'Actualizando datos...')
+        if (progressBarEmisorCounter > 100) clearInterval(progressBarEmisorInterval)
+    }, 1)
+
     const InitgPtyNm = document.getElementById('EmisorInitgPtyNm').value
     const InitgPtyId = document.getElementById('EmisorInitgPtyId').value
     const CdtrAcct = document.getElementById('EmisorCdtrAcct').value
@@ -418,3 +426,8 @@ function progressBar(parentElement, progress, text)
     ''
     parentElement.innerHTML = progressBar
 }
+
+document.getElementById('navEmisorBtn').addEventListener('click', function(e) {
+    const progressBarEmisorContainer = document.getElementById('progressBarEmisorContainer');
+    progressBarEmisorContainer.innerHTML = ''
+})
