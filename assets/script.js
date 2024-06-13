@@ -268,7 +268,7 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<p><span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span> <button type="button" class="" onclick="eliminarRecibo(' + contador + ')">🗑️</button></p>' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
-    '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-input-2-3" />' +
+    '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-u-5-5" />' +
     '</div>' +
     '<input type="hidden" id="MndtId' + contador + '" name="recibos[' + contador + '][MndtId]" />' +
     '<input type="hidden" id="DtOfSgntr' + contador + '" name="recibos[' + contador + '][DtOfSgntr]" />' +
@@ -278,19 +278,19 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<input type="hidden" id="AdrLine2_' + contador + '" name="recibos[' + contador + '][AdrLine2_]" />' +
     '<input type="hidden" id="IBAN' + contador + '" name="recibos[' + contador + '][IBAN]" />' +
     '<div class="form-field">' +
-    '<label for="Ustrd' + contador + '" class="form-field__label">Concepto' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'auto\', ' + contador + ')">🚗 Auto</button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'hogar\', ' + contador + ')">🏠 Hogar</button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'comunidad\', ' + contador + ')">🏢 Comunidad</button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'decesos\', ' + contador + ')">⚰️ Decesos</button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'salud\', ' + contador + ')">⚕️ Salud</button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'generica\', ' + contador + ')">❔ Genérica</button>' + '&nbsp;' +
+    '<label for="Ustrd' + contador + '" class="">Concepto' + '&nbsp;' +
+    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'auto\', ' + contador + ')">🚗 <span class="conceptoRemesa">Auto</span></button>' + '&nbsp;' +
+    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'hogar\', ' + contador + ')">🏠 <span class="conceptoRemesa">Hogar</span></button>' + '&nbsp;' +
+    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'comunidad\', ' + contador + ')">🏢 <span class="conceptoRemesa">Comunidad</span></button>' + '&nbsp;' +
+    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'decesos\', ' + contador + ')">⚰️ <span class="conceptoRemesa">Decesos</span></button>' + '&nbsp;' +
+    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'salud\', ' + contador + ')">⚕️ <span class="conceptoRemesa">Salud</span></button>' + '&nbsp;' +
+    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'generica\', ' + contador + ')">❔ <span class="conceptoRemesa">Genérica</span></button>' + '&nbsp;' +
     '</label>' +
-    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-input-2-3" />' +
+    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-u-5-5" />' +
     '</div>' +
     '<div class="form-field">' +
-    '<label for="InstdAmt' + contador + '" class="form-field__label">Importe (€)</label>' +
-    '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" class="pure-input-2-3" />' +
+    '<label for="InstdAmt' + contador + '" class="">Importe (€)</label>' +
+    '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" class="pure-u-5-5" />' +
     '</div>' +
     ''
 

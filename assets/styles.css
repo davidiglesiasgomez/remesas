@@ -119,3 +119,23 @@ div.inputFileWrap input[type="file"] {
 .autoComplete_wrapper {
     display: block;
 }
+
+.autoComplete_wrapper {
+    .pure-u-5-5 {
+        width: 100%;
+    }
+}
+
+/* Responsive texto botones concepto remesa */
+@media (max-width: 64em) {
+    span.conceptoRemesa {
+        display: none;
+    }
+}
+
+/* Responsive margen superior botones */
+@media (max-width: 480px) {
+    .pure-form button[type=button] {
+        margin: .7em 0 0;
+    }
+}
