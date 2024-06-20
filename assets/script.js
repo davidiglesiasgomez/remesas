@@ -8,6 +8,7 @@ const headersClientes = {
 var storedClientesData = []
 var storedRemesasData = []
 var storedEmisorData = {}
+var actualRemesaData = {}
 
 // Esperamos a que el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     storedClientesData = JSON.parse(localStorage.getItem('clientes'));
     storedRemesasData = JSON.parse(localStorage.getItem('remesas'));
     storedEmisorData = JSON.parse(localStorage.getItem('emisor'));
+    actualRemesaData = JSON.parse(localStorage.getItem('actual'));
     if (storedClientesData) {
         displayClientesData(storedClientesData, headersClientes);
     }
@@ -27,6 +29,26 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('InitgPtyId').value = storedEmisorData.InitgPtyId || ''
         document.getElementById('CdtrAcct').value = storedEmisorData.CdtrAcct || ''
         document.getElementById('CdtrAgtBIC').value = storedEmisorData.CdtrAgtBIC || ''
+    }
+    if (actualRemesaData) {
+        document.getElementById('InitgPtyNm').value = actualRemesaData.InitgPtyNm || ''
+        document.getElementById('InitgPtyId').value = actualRemesaData.InitgPtyId || ''
+        document.getElementById('CdtrAcct').value = actualRemesaData.CdtrAcct || ''
+        document.getElementById('CdtrAgtBIC').value = actualRemesaData.CdtrAgtBIC || ''
+        document.getElementById('MessageID').value = actualRemesaData.MessageID || ''
+        document.getElementById('CreationDate').value = actualRemesaData.CreationDate || ''
+        document.getElementById('FicheroIDDate').value = actualRemesaData.FicheroIDDate || ''
+        document.getElementById('FicheroIDPicker').value = actualRemesaData.FicheroIDPicker || ''
+        document.getElementById('FicheroID').value = actualRemesaData.FicheroID || ''
+        document.getElementById('NumRows').value = actualRemesaData.NumRows || ''
+        document.getElementById('CtrlSum').value = actualRemesaData.CtrlSum || ''
+        document.getElementById('contadorRecibosRemesa').value = 0
+        if (typeof actualRemesaData.recibos === 'object' && Object.keys(actualRemesaData.recibos).length) {
+            document.getElementById('contadorRecibosRemesa').value = Object.keys(actualRemesaData.recibos).length
+            Object.keys(actualRemesaData.recibos).forEach((key) => {
+                insertarRecibo(key, actualRemesaData.recibos[key])
+            })
+        }
     }
 
     // Ocultar todas las secciones excepto la introducción
@@ -263,19 +285,27 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     document.getElementById('contadorRecibosRemesa').value = 1 + parseInt(document.getElementById('contadorRecibosRemesa').value)
     const contador = parseInt(document.getElementById('contadorRecibosRemesa').value)
 
+    insertarRecibo(contador)
+
+    recalcularTotalRecibos()
+
+    showToast("Recibo añadido", "success", 5000);
+}
+
+function insertarRecibo(contador, recibo={}) {
     const formRecibo = '' +
     '<p><span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span> <button type="button" class="btnEliminarRecibo" contador="' + contador + '">🗑️</button></p>' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
-    '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-u-5-5" />' +
+    '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-u-5-5" value="' + ( recibo.Identificador || '' ) + '" />' +
     '</div>' +
-    '<input type="hidden" id="MndtId' + contador + '" name="recibos[' + contador + '][MndtId]" />' +
-    '<input type="hidden" id="DtOfSgntr' + contador + '" name="recibos[' + contador + '][DtOfSgntr]" />' +
-    '<input type="hidden" id="Nm' + contador + '" name="recibos[' + contador + '][Nm]" />' +
-    '<input type="hidden" id="Ctry' + contador + '" name="recibos[' + contador + '][Ctry]" />' +
-    '<input type="hidden" id="AdrLine1_' + contador + '" name="recibos[' + contador + '][AdrLine1_]" />' +
-    '<input type="hidden" id="AdrLine2_' + contador + '" name="recibos[' + contador + '][AdrLine2_]" />' +
-    '<input type="hidden" id="IBAN' + contador + '" name="recibos[' + contador + '][IBAN]" />' +
+    '<input type="hidden" id="MndtId' + contador + '" name="recibos[' + contador + '][MndtId]" value="' + ( recibo.MndtId || '' ) + '" />' +
+    '<input type="hidden" id="DtOfSgntr' + contador + '" name="recibos[' + contador + '][DtOfSgntr]" value="' + ( recibo.DtOfSgntr || '' ) + '" />' +
+    '<input type="hidden" id="Nm' + contador + '" name="recibos[' + contador + '][Nm]" value="' + ( recibo.Nm || '' ) + '" />' +
+    '<input type="hidden" id="Ctry' + contador + '" name="recibos[' + contador + '][Ctry]" value="' + ( recibo.Ctry || '' ) + '" />' +
+    '<input type="hidden" id="AdrLine1_' + contador + '" name="recibos[' + contador + '][AdrLine1_]" value="' + ( recibo.AdrLine1_ || '' ) + '" />' +
+    '<input type="hidden" id="AdrLine2_' + contador + '" name="recibos[' + contador + '][AdrLine2_]" value="' + ( recibo.AdrLine2_ || '' ) + '" />' +
+    '<input type="hidden" id="IBAN' + contador + '" name="recibos[' + contador + '][IBAN]" value="' + ( recibo.IBAN || '' ) + '" />' +
     '<div class="form-field">' +
     '<label for="Ustrd' + contador + '" class="">Concepto' + '&nbsp;' +
     '<button type="button" class="btnConcepto" concepto="auto" contador="' + contador + '">🚗 <span class="conceptoRemesa">Auto</span></button>' + '&nbsp;' +
@@ -285,11 +315,11 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<button type="button" class="btnConcepto" concepto="salud" contador="' + contador + '">⚕️ <span class="conceptoRemesa">Salud</span></button>' + '&nbsp;' +
     '<button type="button" class="btnConcepto" concepto="generica" contador="' + contador + '">❔ <span class="conceptoRemesa">Genérica</span></button>' + '&nbsp;' +
     '</label>' +
-    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-u-5-5" />' +
+    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-u-5-5" value="' + ( recibo.Ustrd || '' ) + '" />' +
     '</div>' +
     '<div class="form-field">' +
     '<label for="InstdAmt' + contador + '" class="">Importe (€)</label>' +
-    '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" class="pure-u-5-5" />' +
+    '<input type="text" id="InstdAmt' + contador + '" name="recibos[' + contador + '][InstdAmt]" value="' + ( recibo.InstdAmt || '' ) + '" class="pure-u-5-5" />' +
     '</div>' +
     ''
 
@@ -354,10 +384,6 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
             rellenarConceptoRemesa(concepto, contadorRecibo)
         })
     })
-
-    recalcularTotalRecibos()
-
-    showToast("Recibo añadido", "success", 5000);
 }
 
 function rellenarConceptoRemesa(tipo, contador) {
@@ -406,6 +432,7 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     // console.log('data', data)
     // const dataObject = Object.fromEntries(data.entries())
     // console.log('dataObject', dataObject)
+
     data.forEach((value, key) => {
         // console.log(`${key}: ${value}`)
         const keys = key.match(/[^[\]]+/g); // Extrae las claves
@@ -421,7 +448,8 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
             data[keys[0]] = value;
         }
     })
-    // console.log('data', data)
+    console.log('data', data)
+    saveData(data, 'actual')
 
     showToast("Es necesario rellenar todos los datos", "danger", 5000);
 }
