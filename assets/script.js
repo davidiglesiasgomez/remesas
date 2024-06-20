@@ -264,7 +264,7 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     const contador = parseInt(document.getElementById('contadorRecibosRemesa').value)
 
     const formRecibo = '' +
-    '<p><span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span> <button type="button" class="" onclick="eliminarRecibo(' + contador + ')">🗑️</button></p>' +
+    '<p><span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span> <button type="button" class="btnEliminarRecibo" contador="' + contador + '">🗑️</button></p>' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
     '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-u-5-5" />' +
@@ -278,12 +278,12 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     '<input type="hidden" id="IBAN' + contador + '" name="recibos[' + contador + '][IBAN]" />' +
     '<div class="form-field">' +
     '<label for="Ustrd' + contador + '" class="">Concepto' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'auto\', ' + contador + ')">🚗 <span class="conceptoRemesa">Auto</span></button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'hogar\', ' + contador + ')">🏠 <span class="conceptoRemesa">Hogar</span></button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'comunidad\', ' + contador + ')">🏢 <span class="conceptoRemesa">Comunidad</span></button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'decesos\', ' + contador + ')">⚰️ <span class="conceptoRemesa">Decesos</span></button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'salud\', ' + contador + ')">⚕️ <span class="conceptoRemesa">Salud</span></button>' + '&nbsp;' +
-    '<button type="button" class="" onclick="rellenarConceptoRemesa(\'generica\', ' + contador + ')">❔ <span class="conceptoRemesa">Genérica</span></button>' + '&nbsp;' +
+    '<button type="button" class="btnConcepto" concepto="auto" contador="' + contador + '">🚗 <span class="conceptoRemesa">Auto</span></button>' + '&nbsp;' +
+    '<button type="button" class="btnConcepto" concepto="hogar" contador="' + contador + '">🏠 <span class="conceptoRemesa">Hogar</span></button>' + '&nbsp;' +
+    '<button type="button" class="btnConcepto" concepto="comunidad" contador="' + contador + '">🏢 <span class="conceptoRemesa">Comunidad</span></button>' + '&nbsp;' +
+    '<button type="button" class="btnConcepto" concepto="decesos" contador="' + contador + '">⚰️ <span class="conceptoRemesa">Decesos</span></button>' + '&nbsp;' +
+    '<button type="button" class="btnConcepto" concepto="salud" contador="' + contador + '">⚕️ <span class="conceptoRemesa">Salud</span></button>' + '&nbsp;' +
+    '<button type="button" class="btnConcepto" concepto="generica" contador="' + contador + '">❔ <span class="conceptoRemesa">Genérica</span></button>' + '&nbsp;' +
     '</label>' +
     '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-u-5-5" />' +
     '</div>' +
@@ -338,6 +338,21 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     })
     inputInstdAmt.addEventListener('input', (event) => {
         recalcularTotalRecibos()
+    })
+
+    document.querySelectorAll('.btnEliminarRecibo[contador="' + contador + '"]').forEach((element) => {
+        var contadorRecibo = parseInt(element.getAttribute('contador')) || 0
+        element.addEventListener('click', (event) => {
+            eliminarRecibo(contadorRecibo)
+        })
+    })
+
+    document.querySelectorAll('.btnConcepto[contador="' + contador + '"]').forEach((element) => {
+        var concepto = element.getAttribute('concepto') || '';
+        var contadorRecibo = parseInt(element.getAttribute('contador')) || 0
+        element.addEventListener('click', (event) => {
+            rellenarConceptoRemesa(concepto, contadorRecibo)
+        })
     })
 
     recalcularTotalRecibos()
