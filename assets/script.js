@@ -450,7 +450,16 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     })
     data.recibos = Object.keys(data.recibos).map(key => data.recibos[key])
     // console.log('data', data)
+
+    // Almacenar remesa actual
     saveData(data, 'actual')
+
+    // Almacenar remesa en la lista de remesas
+    if (storedRemesasData === null) {
+        storedRemesasData = []
+    }
+    storedRemesasData.push(data)
+    saveData(storedRemesasData, 'remesas')
 
     showToast("Es necesario rellenar todos los datos", "danger", 5000);
 }
