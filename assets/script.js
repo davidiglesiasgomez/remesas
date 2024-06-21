@@ -5,6 +5,13 @@ const headersClientes = {
     'fecha de inserción': 'Fecha de Inserción'
 };
 
+const headersRemesas = {
+    'FicheroID': 'Recibo de la Remesa',
+    'NumRows': 'Número de Recibos',
+    'CtrlSum': 'Suma de Control',
+    'CreationDate': 'Fecha de Creación'
+};
+
 var storedClientesData = []
 var storedRemesasData = []
 var storedEmisorData = {}
@@ -19,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
     actualRemesaData = JSON.parse(localStorage.getItem('actual'));
     if (storedClientesData) {
         displayClientesData(storedClientesData, headersClientes);
+    }
+    if (storedRemesasData) {
+        displayRemesasData(storedRemesasData, headersRemesas);
     }
     if (storedEmisorData) {
         document.getElementById('EmisorInitgPtyNm').value = storedEmisorData.InitgPtyNm || ''
@@ -175,6 +185,8 @@ function displayClientesData(data, headers) {
     table.appendChild(bodySection);
 
     container.appendChild(table);
+
+    addSortingAndFilteringToTable(document.getElementById('dataClientesTable'));
 }
 
 // Función para añadir el ordenamiento y filtrado a las columnas de la tabla
@@ -238,8 +250,8 @@ function addSortingAndFilteringToTable(table) {
 
 // Llamar a la función addSortingAndFilteringToTable después de cargar el contenido
 document.addEventListener('DOMContentLoaded', () => {
-    const table = document.getElementById('dataClientesTable');
-    addSortingAndFilteringToTable(table);
+    // addSortingAndFilteringToTable(document.getElementById('dataClientesTable'));
+    // addSortingAndFilteringToTable(document.getElementById('dataRemesasTable'));
 }, false);
 
 // Manejar la actualización de datos del emisor
@@ -461,6 +473,11 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     storedRemesasData.push(data)
     saveData(storedRemesasData, 'remesas')
 
+    // Actualizar tabla
+    displayRemesasData(storedRemesasData, headersRemesas);
+
+    // Limpiar remesa actual ¿?
+
     showToast("Es necesario rellenar todos los datos", "danger", 5000);
 }
 
@@ -547,6 +564,54 @@ const showToast = (
     setTimeout(() => {
         box.remove()
     }, duration)
+}
+
+function displayRemesasData(data, headers) {
+    const container = document.getElementById('dataRemesasContainer');
+    container.innerHTML = ''; // Limpiar el contenedor anterior
+
+    if (data.length === 0) {
+        container.innerHTML = '<p>No hay datos disponibles.</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.id = 'dataRemesasTable';
+    table.className = 'pure-table pure-table-bordered'; // Aplicar estilos de PureCSS para tablas
+
+    // Crear la fila de encabezado
+    const headerSection = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    Object.keys(headers).forEach(key => {
+        if (key === 'dato desconocido 1' || key === 'dato desconocido2' || key === 'fecha de inserción') {
+            return;
+        }
+        const th = document.createElement('th');
+        th.textContent = headers[key];
+        headerRow.appendChild(th);
+    });
+    headerSection.appendChild(headerRow);
+    table.appendChild(headerSection);
+
+    const bodySection = document.createElement('tbody');
+    // Crear filas para cada registro de datos
+    data.forEach((item) => {
+        const row = document.createElement('tr');
+        Object.keys(headers).forEach(key => {
+            if (key === 'dato desconocido 1' || key === 'dato desconocido2' || key === 'fecha de inserción') {
+                return;
+            }
+            const cell = document.createElement('td');
+            cell.textContent = item[key];
+            row.appendChild(cell);
+        });
+        bodySection.appendChild(row);
+    });
+    table.appendChild(bodySection);
+
+    container.appendChild(table);
+
+    addSortingAndFilteringToTable(document.getElementById('dataRemesasTable'));
 }
 
 // Toast
