@@ -590,6 +590,9 @@ function displayRemesasData(data, headers) {
         th.textContent = headers[key];
         headerRow.appendChild(th);
     });
+    const th = document.createElement('th')
+    th.textContent = ''
+    headerRow.appendChild(th);
     headerSection.appendChild(headerRow);
     table.appendChild(headerSection);
 
@@ -605,6 +608,19 @@ function displayRemesasData(data, headers) {
             cell.textContent = item[key];
             row.appendChild(cell);
         });
+        const cell = document.createElement('td');
+        const editBtn = document.createElement('button')
+        editBtn.classList.add('btnEditRemesa')
+        editBtn.setAttribute('remesa', item.FicheroID)
+        editBtn.textContent = '📝'
+        cell.appendChild(editBtn)
+        const deleteBtn = document.createElement('button')
+        deleteBtn.classList.add('btnDeleteRemesa')
+        deleteBtn.setAttribute('remesa', item.FicheroID)
+        deleteBtn.textContent = '🗑️'
+        cell.appendChild(deleteBtn)
+        row.appendChild(cell);
+
         bodySection.appendChild(row);
     });
     table.appendChild(bodySection);
