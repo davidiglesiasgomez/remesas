@@ -41,24 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('CdtrAgtBIC').value = storedEmisorData.CdtrAgtBIC || ''
     }
     if (actualRemesaData) {
-        document.getElementById('InitgPtyNm').value = actualRemesaData.InitgPtyNm || ''
-        document.getElementById('InitgPtyId').value = actualRemesaData.InitgPtyId || ''
-        document.getElementById('CdtrAcct').value = actualRemesaData.CdtrAcct || ''
-        document.getElementById('CdtrAgtBIC').value = actualRemesaData.CdtrAgtBIC || ''
-        document.getElementById('MessageID').value = actualRemesaData.MessageID || ''
-        document.getElementById('CreationDate').value = actualRemesaData.CreationDate || ''
-        document.getElementById('FicheroIDDate').value = actualRemesaData.FicheroIDDate || ''
-        document.getElementById('FicheroIDPicker').value = actualRemesaData.FicheroIDPicker || ''
-        document.getElementById('FicheroID').value = actualRemesaData.FicheroID || ''
-        document.getElementById('NumRows').value = actualRemesaData.NumRows || ''
-        document.getElementById('CtrlSum').value = actualRemesaData.CtrlSum || ''
-        document.getElementById('contadorRecibosRemesa').value = 0
-        if (typeof actualRemesaData.recibos === 'object' && actualRemesaData.recibos.length) {
-            document.getElementById('contadorRecibosRemesa').value = actualRemesaData.recibos.length
-            actualRemesaData.recibos.forEach((element, key) => {
-                insertarRecibo(1+parseInt(key), element)
-            })
-        }
+        cargarRemesa(actualRemesaData)
     }
 
     // Ocultar todas las secciones excepto la introducción
@@ -652,11 +635,16 @@ function displayRemesasData(data, headers) {
 }
 
 function editarRemesa(remesaFicheroId) {
-    console.log('editar', remesaFicheroId)
+    actualRemesaData = storedRemesasData.find(remesa => remesa.FicheroID === remesaFicheroId)
+
+    saveData(actualRemesaData, 'actual')
+
+    cargarRemesa(actualRemesaData)
+
+    document.getElementById('navNuevaBtn').click()
 }
 
 function eliminarRemesa(remesaFicheroId) {
-    console.log('eliminar', remesaFicheroId)
     if (!confirm('¿Está seguro que quiere eliminar la remesa?')) {
         return;
     }
@@ -665,6 +653,28 @@ function eliminarRemesa(remesaFicheroId) {
     saveData(storedRemesasData, 'remesas')
 
     displayRemesasData(storedRemesasData, headersRemesas)
+}
+
+function cargarRemesa(remesa) {
+    document.getElementById('InitgPtyNm').value = remesa.InitgPtyNm || ''
+    document.getElementById('InitgPtyId').value = remesa.InitgPtyId || ''
+    document.getElementById('CdtrAcct').value = remesa.CdtrAcct || ''
+    document.getElementById('CdtrAgtBIC').value = remesa.CdtrAgtBIC || ''
+    document.getElementById('MessageID').value = remesa.MessageID || ''
+    document.getElementById('CreationDate').value = remesa.CreationDate || ''
+    document.getElementById('FicheroIDDate').value = remesa.FicheroIDDate || ''
+    document.getElementById('FicheroIDPicker').value = remesa.FicheroIDPicker || ''
+    document.getElementById('FicheroID').value = remesa.FicheroID || ''
+    document.getElementById('NumRows').value = remesa.NumRows || ''
+    document.getElementById('CtrlSum').value = remesa.CtrlSum || ''
+    document.getElementById('contadorRecibosRemesa').value = 0
+    document.getElementById('recibosRemesaLista').innerHTML = ''
+    if (typeof remesa.recibos === 'object' && remesa.recibos.length) {
+        document.getElementById('contadorRecibosRemesa').value = remesa.recibos.length
+        remesa.recibos.forEach((element, key) => {
+            insertarRecibo(1+parseInt(key), element)
+        })
+    }
 }
 
 // Toast
