@@ -651,15 +651,20 @@ function displayRemesasData(data, headers) {
     })
 }
 
-function editarRemesa(remesa) {
-    console.log('editar', remesa)
+function editarRemesa(remesaFicheroId) {
+    console.log('editar', remesaFicheroId)
 }
 
-function eliminarRemesa(remesa) {
-    console.log('eliminar', remesa)
+function eliminarRemesa(remesaFicheroId) {
+    console.log('eliminar', remesaFicheroId)
     if (!confirm('¿Está seguro que quiere eliminar la remesa?')) {
         return;
     }
+    storedRemesasData = storedRemesasData.filter(remesa => remesa.FicheroID !== remesaFicheroId);
+
+    saveData(storedRemesasData, 'remesas')
+
+    displayRemesasData(storedRemesasData, headersRemesas)
 }
 
 // Toast
