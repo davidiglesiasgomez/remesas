@@ -40,8 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('CdtrAcct').value = storedEmisorData.CdtrAcct || ''
         document.getElementById('CdtrAgtBIC').value = storedEmisorData.CdtrAgtBIC || ''
     }
-    if (actualRemesaData) {
+    if (actualRemesaData && JSON.stringify(actualRemesaData) !== '{}') {
         cargarRemesa(actualRemesaData)
+        document.getElementById('navNuevaBtn').innerHTML = 'Editar remesa'
     }
 
     // Ocultar todas las secciones excepto la introducción
@@ -429,7 +430,9 @@ function rellenarConceptoRemesa(tipo, contador) {
 
 document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     e.preventDefault()
-    console.log('Submit Añadir Remesa Nueva')
+
+    showToast("Grabando la información de la remesa", "info", 5000)
+
     const data = new FormData(e.target)
     // console.log('data', data)
     // const dataObject = Object.fromEntries(data.entries())
@@ -453,6 +456,8 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     data.recibos = Object.keys(data.recibos).map(key => data.recibos[key])
     // console.log('data', data)
 
+    showToast("Validando la información de la remesa", "info", 5000)
+
     // Almacenar remesa actual
     saveData(data, 'actual')
 
@@ -466,9 +471,14 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     // Actualizar tabla
     displayRemesasData(storedRemesasData, headersRemesas);
 
-    // Limpiar remesa actual ¿?
+    // Limpiar remesa actual
+    resetearRemesa()
 
-    showToast("Es necesario rellenar todos los datos", "danger", 5000);
+    // Ir al listado
+    mostrarSeccion('remesas')
+
+    // Nueva remesa
+    document.getElementById('navNuevaBtn').innerHTML = 'Nueva remesa'
 }
 
 function progressBar(parentElement, progress, text)
@@ -490,12 +500,12 @@ document.getElementById('navEmisorBtn').addEventListener('click', function(e) {
 })
 
 document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
-    resetearRemesa()
     mostrarSeccion('nueva')
 })
 
 document.getElementById('irNuevaRemesaBtn').addEventListener('click', function(e) {
     resetearRemesa()
+    document.getElementById('navNuevaBtn').innerHTML = 'Nueva remesa'
     mostrarSeccion('nueva')
 })
 
@@ -649,6 +659,8 @@ function editarRemesa(remesaFicheroId) {
     cargarRemesa(actualRemesaData)
 
     mostrarSeccion('nueva')
+
+    document.getElementById('navNuevaBtn').innerHTML = 'Editar remesa'
 }
 
 function eliminarRemesa(remesaFicheroId) {
