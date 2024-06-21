@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('NumRows').value = actualRemesaData.NumRows || ''
         document.getElementById('CtrlSum').value = actualRemesaData.CtrlSum || ''
         document.getElementById('contadorRecibosRemesa').value = 0
-        if (typeof actualRemesaData.recibos === 'object' && Object.keys(actualRemesaData.recibos).length) {
-            document.getElementById('contadorRecibosRemesa').value = Object.keys(actualRemesaData.recibos).length
-            Object.keys(actualRemesaData.recibos).forEach((key) => {
-                insertarRecibo(key, actualRemesaData.recibos[key])
+        if (typeof actualRemesaData.recibos === 'object' && actualRemesaData.recibos.length) {
+            document.getElementById('contadorRecibosRemesa').value = actualRemesaData.recibos.length
+            actualRemesaData.recibos.forEach((element, key) => {
+                insertarRecibo(1+parseInt(key), element)
             })
         }
     }
@@ -448,7 +448,8 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
             data[keys[0]] = value;
         }
     })
-    console.log('data', data)
+    data.recibos = Object.keys(data.recibos).map(key => data.recibos[key])
+    // console.log('data', data)
     saveData(data, 'actual')
 
     showToast("Es necesario rellenar todos los datos", "danger", 5000);
