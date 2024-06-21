@@ -200,6 +200,10 @@ function addSortingAndFilteringToTable(table) {
     const filterRow = document.createElement('tr');
     headers.forEach((header, index) => {
         const td = document.createElement('td');
+        if (header.textContent === '') {
+            filterRow.appendChild(td);
+            return
+        }
         const input = document.createElement('input');
         input.setAttribute('type', 'text');
         input.setAttribute('placeholder', 'Filtrar...');
@@ -219,6 +223,9 @@ function addSortingAndFilteringToTable(table) {
 
     // Añadir ordenamiento a las columnas
     headers.forEach((header, index) => {
+        if (header.textContent === '') {
+            return
+        }
         let sortOrder = 1; // 1 para orden ascendente, -1 para orden descendente
         header.addEventListener('click', () => {
             const rows = Array.from(table.querySelectorAll('tbody tr'));
