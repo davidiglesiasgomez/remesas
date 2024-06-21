@@ -635,6 +635,31 @@ function displayRemesasData(data, headers) {
     container.appendChild(table);
 
     addSortingAndFilteringToTable(document.getElementById('dataRemesasTable'));
+
+    document.querySelectorAll('.btnEditRemesa').forEach((element) => {
+        const remesa = element.getAttribute('remesa')
+        element.addEventListener('click', (event) => {
+            editarRemesa(remesa)
+        })
+    })
+
+    document.querySelectorAll('.btnDeleteRemesa').forEach((element) => {
+        const remesa = element.getAttribute('remesa')
+        element.addEventListener('click', (event) => {
+            eliminarRemesa(remesa)
+        })
+    })
+}
+
+function editarRemesa(remesa) {
+    console.log('editar', remesa)
+}
+
+function eliminarRemesa(remesa) {
+    console.log('eliminar', remesa)
+    if (!confirm('¿Está seguro que quiere eliminar la remesa?')) {
+        return;
+    }
 }
 
 // Toast
