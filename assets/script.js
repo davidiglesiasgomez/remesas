@@ -490,6 +490,13 @@ document.getElementById('navEmisorBtn').addEventListener('click', function(e) {
 })
 
 document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
+    resetearRemesa()
+    mostrarSeccion('nueva')
+})
+
+document.getElementById('irNuevaRemesaBtn').addEventListener('click', function(e) {
+    resetearRemesa()
+    mostrarSeccion('nueva')
 })
 
 function eliminarRecibo(contador)
@@ -641,7 +648,7 @@ function editarRemesa(remesaFicheroId) {
 
     cargarRemesa(actualRemesaData)
 
-    document.getElementById('navNuevaBtn').click()
+    mostrarSeccion('nueva')
 }
 
 function eliminarRemesa(remesaFicheroId) {
@@ -674,6 +681,23 @@ function cargarRemesa(remesa) {
         remesa.recibos.forEach((element, key) => {
             insertarRecibo(1+parseInt(key), element)
         })
+    }
+}
+
+function resetearRemesa() {
+    actualRemesaData = {}
+    saveData(actualRemesaData, 'actual')
+    cargarRemesa(actualRemesaData)
+}
+
+function mostrarSeccion(seccionId) {
+    const secciones = document.querySelectorAll('section')
+    secciones.forEach(seccion => {
+        seccion.style.display = 'none'
+    })
+    const seccionMostrar = document.getElementById(seccionId)
+    if (seccionMostrar) {
+        seccionMostrar.style.display = 'block'
     }
 }
 

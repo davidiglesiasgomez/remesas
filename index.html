@@ -53,7 +53,7 @@
                     <input type="text" id="EmisorCdtrAcct" class="pure-input-2-3" />
                     <label for="EmisorCdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
                     <input type="text" id="EmisorCdtrAgtBIC" class="pure-input-2-3" />
-                    <label />
+                    <p>&nbsp;</p>
                     <button id="updateEmisorBtn" type="submit" class="pure-button pure-button-primary">Actualizar</button>
                 </fieldset>
             </form>
@@ -62,6 +62,8 @@
         <section id="remesas">
             <h2>Listado de Remesas</h2>
             <div id="dataRemesasContainer"></div>
+            <p>&nbsp;</p>
+            <button href="#nueva" id="irNuevaRemesaBtn" class="pure-button pure-button-primary">Nueva Remesa</button>
         </section>
 
         <section id="subir">
@@ -80,7 +82,7 @@
         </section>
 
         <section id="nueva">
-            <h2>Añadir Nueva Remesa</h2>
+            <h2>Editar Remesa</h2>
             <form id="nuevaRemesaForm" method="post" class="pure-form pure-form-stacked">
                 <input type="hidden" id="InitgPtyNm" name="InitgPtyNm" />
                 <input type="hidden" id="InitgPtyId" name="InitgPtyId" />
@@ -109,7 +111,7 @@
                     <legend>Lista de Recibos</legend>
                     <input type="hidden" id="contadorRecibosRemesa" value="0" />
                     <div id="recibosRemesaLista"></div>
-                    <label />
+                    <p>&nbsp;</p>
                     <button id="nuevoReciboBtn" type="button" class="pure-button pure-button-primary">Añadir recibo</button>
                     <button id="nuevaRemesaBtn" type="submit" class="pure-button pure-button-primary">Añadir remesa</button>
                 </fieldset>
