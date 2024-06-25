@@ -12,6 +12,8 @@ const headersRemesas = {
     'CreationDate': 'Fecha de Creación'
 };
 
+const letras = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
+
 var storedClientesData = []
 var storedRemesasData = []
 var storedEmisorData = {}
@@ -272,7 +274,8 @@ const ficheroIdPicker = MCDatepicker.create({
     closeOnBlur: true
 });
 ficheroIdPicker.onSelect((date, formatedDate) => {
-    document.getElementById('FicheroID').value = 'R' + formatedDate.replaceAll(' ', '')
+    let remesaFicheroId = 'R' + formatedDate.replaceAll(' ', '')
+    document.getElementById('FicheroID').value = remesaFicheroId
     document.getElementById('FicheroIDDate').value = date
 });
 document.getElementById('FicheroIDBtn').onclick = () => ficheroIdPicker.open();
@@ -801,6 +804,47 @@ function convertirFecha(formatoOriginal) {
 
     const formatoNuevo = `${año}-${mesConDosDigitos}-${diaConDosDigitos}`;
     return formatoNuevo;
+}
+
+// document.getElementById("FicheroID").addEventListener('blur', (event) => {
+//     console.log('blur', 'FicheroID', event.target.value)
+//     comprobarRemesaFicheroIdExistente(event.target.value)
+// })
+document.getElementById("FicheroID").addEventListener('change', (event) => {
+    console.log('change', 'FicheroID', event.target.value)
+    comprobarRemesaFicheroIdExistente(event.target.value)
+})
+// document.getElementById("FicheroID").addEventListener('input', (event) => {
+//     console.log('input', 'FicheroID', event.target.value)
+//     comprobarRemesaFicheroIdExistente(event.target.value)
+// })
+
+function comprobarRemesaFicheroIdExistente(remesaFicheroId) {
+    let remesas = storedRemesasData.filter(remesa => remesa.FicheroID.startsWith(remesaFicheroId)).map(remesa => remesa.FicheroID)
+    // console.log('remesas', remesas)
+
+    if (remesas.length===0) {
+        return;
+    }
+
+    if (remesas.length===1) {
+        Swal.fire({
+            // title: `Existe otra remesa con el nombre de fichero ${remesaFicheroId}`,
+            title: "Aviso",
+            html: `
+                Existe otra remesa con el nombre de fichero <b>${remesaFicheroId}</b>.
+                <br /><a href="#" onclick="console.log('Hola'); editarRemesa('${remesaFicheroId}'); Swal.close();">¿Prefieres cargar los datos de la existente?<a>
+                <br /><a href="#" onclick="">¿Quieres crear una nueva usando el patrón A, B, C...?<a>
+                <br />En caso contrario, pulsa Cancelar para continuar
+            `,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: true,
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            return
+        });
+    }
 }
 
 // Toast
