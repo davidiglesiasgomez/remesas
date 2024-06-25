@@ -621,6 +621,11 @@ function displayRemesasData(data, headers) {
         editBtn.setAttribute('remesa', item.FicheroID)
         editBtn.textContent = '📝'
         cell.appendChild(editBtn)
+        const downloadBtn = document.createElement('button')
+        downloadBtn.classList.add('btnDownloadRemesa')
+        downloadBtn.setAttribute('remesa', item.FicheroID)
+        downloadBtn.textContent = '💾'
+        cell.appendChild(downloadBtn)
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btnDeleteRemesa')
         deleteBtn.setAttribute('remesa', item.FicheroID)
@@ -647,6 +652,13 @@ function displayRemesasData(data, headers) {
         const remesa = element.getAttribute('remesa')
         element.addEventListener('click', (event) => {
             eliminarRemesa(remesa)
+        })
+    })
+
+    document.querySelectorAll('.btnDownloadRemesa').forEach((element) => {
+        const remesa = element.getAttribute('remesa')
+        element.addEventListener('click', (event) => {
+            descargarRemesa(remesa)
         })
     })
 }
@@ -711,6 +723,81 @@ function mostrarSeccion(seccionId) {
     if (seccionMostrar) {
         seccionMostrar.style.display = 'block'
     }
+}
+
+function descargarRemesa(remesaFicheroId) {
+    actualRemesaData = storedRemesasData.find(remesa => remesa.FicheroID === remesaFicheroId)
+
+    let now = new Date();
+    let nowString = now.getFullYear()+(now.getMonth()+1).toString(10).padStart(2,"0")+now.getDate().toString(10).padStart(2,"0")+now.getHours().toString(10).padStart(2,"0")+now.getMinutes().toString(10).padStart(2,"0")+now.getSeconds().toString(10).padStart(2,"0")+now.getMilliseconds().toString(10).padStart(3,"0")+"00";
+
+    // Realizar sustituciones (si es necesario)
+    xmlContent = content;
+	xmlContent = xmlContent.replace(/{MessageId}/g, "PRE" + nowString + actualRemesaData.FicheroID.padStart(13, '0').toUpperCase() );
+	xmlContent = xmlContent.replace(/{CreationDate}/g, '');
+	xmlContent = xmlContent.replace(/{PmtInfId}/g, '');
+	xmlContent = xmlContent.replace(/{SeqDate}/g, '');
+	xmlContent = xmlContent.replace(/{InitgPtyNm}/g, actualRemesaData.InitgPtyNm)
+	xmlContent = xmlContent.replace(/{InitgPtyId}/g, actualRemesaData.InitgPtyId)
+	xmlContent = xmlContent.replace(/{CdtrAcct}/g, actualRemesaData.CdtrAcct)
+	xmlContent = xmlContent.replace(/{CdtrAgtBIC}/g, actualRemesaData.CdtrAgtBIC)
+	xmlContent = xmlContent.replace(/{CtrlSum}/g, convertirImporte(actualRemesaData.CtrlSum))
+	xmlContent = xmlContent.replace(/{NumRows}/g, actualRemesaData.NumRows)
+    actualRemesaData.recibos.forEach((recibo, index) => {
+        xmlRow = row
+        xmlRow = xmlRow.replace(/{InstrId}/g, '');
+        xmlRow = xmlRow.replace(/{EndToEndId}/g, '');
+        xmlRow = xmlRow.replace(/{InstdAmt}/g, convertirImporte(recibo.InstdAmt));
+        xmlRow = xmlRow.replace(/{MndtId}/g, recibo.MndtId);
+        xmlRow = xmlRow.replace(/{DtOfSgntr}/g, convertirFecha(recibo.DtOfSgntr));
+        xmlRow = xmlRow.replace(/{Nm}/g, recibo.Nm);
+        xmlRow = xmlRow.replace(/{Ctry}/g, recibo.Ctry);
+        xmlRow = xmlRow.replace(/{AdrLine_1}/g, recibo.AdrLine1_);
+        xmlRow = xmlRow.replace(/{AdrLine_2}/g, recibo.AdrLine2_);
+        xmlRow = xmlRow.replace(/{IBAN}/g, recibo.IBAN);
+        xmlRow = xmlRow.replace(/{Ustrd}/g, recibo.Ustrd);
+        xmlContent = xmlContent.replace(/{DrctDbtTxInf}/g, xmlRow + '{DrctDbtTxInf}')
+    })
+    xmlContent = xmlContent.replace(/{DrctDbtTxInf}/g, '')
+
+    // Crear un Blob con el contenido XML
+    const blob = new Blob([xmlContent], { type: 'application/xml' });
+
+    // Crear un enlace de descarga
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = remesaFicheroId + '.xml';
+
+    // Añadir el enlace al DOM y simular un clic
+    document.body.appendChild(link);
+    link.click();
+
+    // Eliminar el enlace del DOM
+    document.body.removeChild(link);
+}
+
+function convertirImporte(importeOriginal)
+{
+    return parseFloat(importeOriginal).toFixed(2)
+}
+
+function convertirFecha(formatoOriginal) {
+    const partes = formatoOriginal.split('/');
+    if (partes.length !== 3) {
+        throw new Error('Formato de fecha inválido. Debe ser dd/mm/yyyy');
+    }
+
+    const [dia, mes, año] = partes;
+
+    if (dia.length !== 2 || mes.length !== 2 || año.length !== 4) {
+        throw new Error('Formato de fecha inválido. Debe ser dd/mm/yyyy');
+    }
+
+    const mesConDosDigitos = mes.padStart(2, '0');
+    const diaConDosDigitos = dia.padStart(2, '0');
+
+    const formatoNuevo = `${año}-${mesConDosDigitos}-${diaConDosDigitos}`;
+    return formatoNuevo;
 }
 
 // Toast
