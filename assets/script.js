@@ -67,10 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     section.style.display = 'none';
                 }
             });
-            navLinks.forEach(link => {
-                link.parentElement.classList.remove('pure-menu-selected')
-            });
-            this.parentElement.classList.add('pure-menu-selected')
+            // navLinks.forEach(link => {
+            //     link.parentElement.classList.remove('pure-menu-selected')
+            // });
+            // this.parentElement.classList.add('pure-menu-selected')
         });
     });
 });
