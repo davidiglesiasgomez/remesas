@@ -364,12 +364,15 @@ function insertarRecibo(contador, recibo={}) {
 
     var inputInstdAmt = document.getElementById("InstdAmt" + contador)
     inputInstdAmt.addEventListener('blur', (event) => {
+        inputInstdAmt.value = inputInstdAmt.value.replace(',', '.')
         recalcularTotalRecibos()
     })
     inputInstdAmt.addEventListener('change', (event) => {
+        inputInstdAmt.value = inputInstdAmt.value.replace(',', '.')
         recalcularTotalRecibos()
     })
     inputInstdAmt.addEventListener('input', (event) => {
+        inputInstdAmt.value = inputInstdAmt.value.replace(',', '.')
         recalcularTotalRecibos()
     })
 
@@ -531,7 +534,7 @@ function recalcularTotalRecibos()
         numero += 1
         recibo.querySelector('span.labelRecibo').textContent = 'Recibo #' + numero
     })
-    document.getElementById('CtrlSum').value = total
+    document.getElementById('CtrlSum').value = convertirImporte(total)
     document.getElementById('NumRows').value = numero
 }
 
