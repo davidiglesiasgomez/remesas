@@ -440,38 +440,40 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     showToast("Grabando la información de la remesa", "info", 5000)
 
     const data = new FormData(e.target)
-    // console.log('data', data)
-    // const dataObject = Object.fromEntries(data.entries())
-    // console.log('dataObject', dataObject)
+    const dataObject = {}
 
     data.forEach((value, key) => {
-        // console.log(`${key}: ${value}`)
-        const keys = key.match(/[^[\]]+/g); // Extrae las claves
+        const keys = key.match(/[^[\]]+/g)
         if (keys.length === 3) {
-            if (!data[keys[0]]) {
-                data[keys[0]] = {};
+            if (!dataObject[keys[0]]) {
+                dataObject[keys[0]] = {}
             }
-            if (!data[keys[0]][keys[1]]) {
-                data[keys[0]][keys[1]] = {};
+            if (!dataObject[keys[0]][keys[1]]) {
+                dataObject[keys[0]][keys[1]] = {}
             }
-            data[keys[0]][keys[1]][keys[2]] = value;
+            dataObject[keys[0]][keys[1]][keys[2]] = value
         } else if (keys.length === 1) {
-            data[keys[0]] = value;
+            dataObject[keys[0]] = value
         }
     })
-    data.recibos = Object.keys(data.recibos).map(key => data.recibos[key])
-    // console.log('data', data)
+    dataObject.recibos = Object.keys(dataObject.recibos).map(key => dataObject.recibos[key])
+    // console.log('dataObject', dataObject)
 
     showToast("Validando la información de la remesa", "info", 5000)
 
     // Almacenar remesa actual
-    saveData(data, 'actual')
+    saveData(dataObject, 'actual')
 
     // Almacenar remesa en la lista de remesas
     if (storedRemesasData === null) {
         storedRemesasData = []
     }
-    storedRemesasData.push(data)
+    const index = storedRemesasData.findIndex(remesa => remesa.FicheroID === dataObject.FicheroID);
+    if (index !== -1) {
+        storedRemesasData[index] = { ...storedRemesasData[index], ...dataObject };
+    } else {
+        storedRemesasData.push(dataObject)
+    }
     saveData(storedRemesasData, 'remesas')
 
     // Actualizar tabla
