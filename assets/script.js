@@ -288,7 +288,10 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
     e.preventDefault()
 
     if (!document.getElementById('FicheroID').value) {
-        showToast("Es imprescindible indicar el fichero de remesa", "danger", 5000);
+        Toast.fire({
+            icon: "error",
+            title: "Es imprescindible indicar el fichero de remesa",
+        })
         return;
     }
 
@@ -299,7 +302,10 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
 
     recalcularTotalRecibos()
 
-    showToast("Recibo añadido", "success", 5000);
+    Toast.fire({
+        icon: "success",
+        title: "Recibo añadido",
+    })
 }
 
 function insertarRecibo(contador, recibo={}) {
@@ -441,7 +447,10 @@ function rellenarConceptoRemesa(tipo, contador) {
 document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     e.preventDefault()
 
-    showToast("Grabando la información de la remesa", "info", 5000)
+    Toast.fire({
+        icon: "info",
+        title: "Grabando la información de la remesa",
+    })
 
     const data = new FormData(e.target)
     const dataObject = {}
@@ -460,10 +469,16 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
             dataObject[keys[0]] = value
         }
     })
+    if (typeof dataObject.recibos === 'undefined' || dataObject.recibos === null) {
+        dataObject.recibos = []
+    }
     dataObject.recibos = Object.keys(dataObject.recibos).map(key => dataObject.recibos[key])
     // console.log('dataObject', dataObject)
 
-    showToast("Validando la información de la remesa", "info", 5000)
+    Toast.fire({
+        icon: "info",
+        title: "Validando la información de la remesa",
+    })
 
     // Almacenar remesa actual
     saveData(dataObject, 'actual')
@@ -491,6 +506,11 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
 
     // Nueva remesa
     document.getElementById('navNuevaBtn').innerHTML = 'Nueva remesa'
+
+    Toast.fire({
+        icon: "success",
+        title: "Remesa almacenada correctamente",
+    })
 }
 
 document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
@@ -506,12 +526,22 @@ document.getElementById('irNuevaRemesaBtn').addEventListener('click', function(e
 function eliminarRecibo(contador)
 {
     contador = contador || 0
-    if (!confirm('¿Está seguro que quiere eliminar el recibo?')) {
-        return;
-    }
-    document.getElementById('Recibo' + contador).remove()
-    recalcularTotalRecibos()
-    showToast("Recibo eliminado", "success", 5000);
+    Swal.fire({
+        title: "¿Está seguro que quiere eliminar el recibo?",
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('Recibo' + contador).remove()
+            recalcularTotalRecibos()
+            Toast.fire({
+                icon: "success",
+                title: "Recibo eliminado",
+            })
+        }
+    })
 }
 
 function recalcularTotalRecibos()
@@ -527,44 +557,6 @@ function recalcularTotalRecibos()
     })
     document.getElementById('CtrlSum').value = convertirImporte(total)
     document.getElementById('NumRows').value = numero
-}
-
-let icon = {
-    success:
-    '<span class="">✔️</span>',
-    danger:
-    '<span class="">❌</span>',
-    warning:
-    '<span class="">⚠️</span>',
-    info:
-    '<span class="">ℹ️</span>',
-};
-
-const showToast = (
-    message = "Sample Message",
-    toastType = "info",
-    duration = 5000) => {
-    if (!Object.keys(icon).includes(toastType)) {
-        toastType = "info"
-    }
-
-    let box = document.createElement("div")
-    box.classList.add("toast", `toast-${toastType}`)
-    box.innerHTML = ` <div class="toast-content-wrapper">
-                      <div class="toast-icon">
-                      ${icon[toastType]}
-                      </div>
-                      <div class="toast-message">${message}</div>
-                      <div class="toast-progress"></div>
-                      </div>`
-    duration = duration || 5000
-    box.querySelector(".toast-progress").style.animationDuration = `${duration / 1000}s`
-
-    document.getElementById('toast-overlay').appendChild(box)
-
-    setTimeout(() => {
-        box.remove()
-    }, duration)
 }
 
 function displayRemesasData(data, headers) {
@@ -834,12 +826,6 @@ function comprobarRemesaFicheroIdExistente(remesaFicheroId) {
         });
     }
 }
-
-// Toast
-// showToast("Article Submitted Successfully", "success", 5000);
-// showToast("Do POTD and Earn Coins", "info", 5000);
-// showToast("Failed unexpected error", "danger", 5000);
-// showToast("!warning! server error", "warning", 5000);
 
 // Manejar la subida de fichero de remesa XML
 document.getElementById('uploadFicheroRemesaXmlBtn').addEventListener('click', function() {
