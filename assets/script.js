@@ -311,7 +311,11 @@ document.getElementById('nuevoReciboBtn').onclick = (e) => {
 
 function insertarRecibo(contador, recibo={}) {
     const formRecibo = '' +
-    '<p><span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span> <button type="button" class="btnEliminarRecibo" contador="' + contador + '">🗑️</button></p>' +
+    '<p>' +
+    '<span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span>' +
+    ' ' + 
+    '<button type="button" class="btnEliminarRecibo" contador="' + contador + '" title="Eliminar Recibo">🗑️</button>' +
+    '</p>' +
     '<div class="form-field">' +
     '<label for="Identificador' + contador + '" class="">Cliente</label>' +
     '<input type="text" id="Identificador' + contador + '" name="recibos[' + contador + '][Identificador]" class="pure-u-5-5" value="' + ( recibo.Identificador || '' ) + '" />' +
@@ -606,16 +610,19 @@ function displayRemesasData(data, headers) {
         const editBtn = document.createElement('button')
         editBtn.classList.add('btnEditRemesa')
         editBtn.setAttribute('remesa', item.FicheroID)
+        editBtn.setAttribute('title', 'Editar Remesa')
         editBtn.textContent = '📝'
         cell.appendChild(editBtn)
         const downloadBtn = document.createElement('button')
         downloadBtn.classList.add('btnDownloadRemesa')
         downloadBtn.setAttribute('remesa', item.FicheroID)
+        downloadBtn.setAttribute('title', 'Descagar Fichero XML Remesa')
         downloadBtn.textContent = '💾'
         cell.appendChild(downloadBtn)
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btnDeleteRemesa')
         deleteBtn.setAttribute('remesa', item.FicheroID)
+        deleteBtn.setAttribute('title', 'Eliminar Remesa')
         deleteBtn.textContent = '🗑️'
         cell.appendChild(deleteBtn)
         row.appendChild(cell);
