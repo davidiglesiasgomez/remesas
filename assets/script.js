@@ -14,6 +14,18 @@ const headersRemesas = {
 
 const letras = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer
+        toast.onmouseleave = Swal.resumeTimer
+    }
+})
+
 var storedClientesData = []
 var storedRemesasData = []
 var storedEmisorData = {}
@@ -78,36 +90,25 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Manejar la subida de archivos
-document.getElementById('fileClientesInput').addEventListener('click', function() {
-    const progressBarClientesContainer = document.getElementById('progressBarClientesContainer');
-    progressBarClientesContainer.innerHTML = ''
-})
-
 document.getElementById('uploadClientesBtn').addEventListener('click', function() {
-
-    const progressBarClientesContainer = document.getElementById('progressBarClientesContainer');
-    var progressBarClientesCounter = 0
-    var progressBarClientesInterval = setInterval(() => {
-        progressBar(progressBarClientesContainer, progressBarClientesCounter++, 'Subiendo archivo...')
-        if (progressBarClientesCounter > 100) clearInterval(progressBarClientesInterval)
-    }, 50)
-
-    const fileClientesInput = document.getElementById('fileClientesInput');
-    const file = fileClientesInput.files[0];
+    Toast.fire({
+        icon: "info",
+        title: "Subiendo fichero de clientes...",
+    })
+    const fileClientesInput = document.getElementById('fileClientesInput')
+    const file = fileClientesInput.files[0]
     if (file) {
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onload = function(e) {
-            const text = e.target.result;
-            const data = parseCSV(text, ['nombre', 'iban', 'dato desconocido 1', 'domicilio', 'código postal y localidad', 'provincia', 'código de país', 'dato desconocido2', 'nif', 'fecha de inserción']);
-            saveData(data, 'clientes');
-            displayClientesData(data, headersClientes);
-
-            clearInterval(progressBarClientesInterval)
-            progressBarClientesInterval = setInterval(() => {
-                progressBar(progressBarClientesContainer, progressBarClientesCounter++, 'Subiendo archivo...')
-                if (progressBarClientesCounter > 100) clearInterval(progressBarClientesInterval)
-            }, 1)
-        };
+            const text = e.target.result
+            const data = parseCSV(text, ['nombre', 'iban', 'dato desconocido 1', 'domicilio', 'código postal y localidad', 'provincia', 'código de país', 'dato desconocido2', 'nif', 'fecha de inserción'])
+            saveData(data, 'clientes')
+            displayClientesData(data, headersClientes)
+            Toast.fire({
+                icon: "success",
+                title: "Subido fichero de clientes",
+            })
+        }
         reader.readAsText(file);
     }
 });
@@ -262,8 +263,11 @@ document.getElementById('updateEmisorForm').addEventListener('submit', function(
     }
     const item = 'emisor'
     saveData(data, item)
-    showToast("Datos grabados correctamente", "success", 5000);
-});
+    Toast.fire({
+        icon: "success",
+        title: "Datos del emisor grabados correctamente",
+    })
+})
 
 const ficheroIdPicker = MCDatepicker.create({
     el: '#FicheroIDPicker',
@@ -488,24 +492,6 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     // Nueva remesa
     document.getElementById('navNuevaBtn').innerHTML = 'Nueva remesa'
 }
-
-function progressBar(parentElement, progress, text)
-{
-    progress = progress || 0
-    progress = ( progress > 100 ? 100 : progress )
-    text = text || ''
-    const progressBar = '' +
-    '<div class="progressBarWrap">' +
-    '<div class="progress-bar">' +
-    '<span class="progress-bar-fill" style="width: ' + progress + '%;"></span>' +
-    '</div>' +
-    '</div>' +
-    ''
-    parentElement.innerHTML = progressBar
-}
-
-document.getElementById('navEmisorBtn').addEventListener('click', function(e) {
-})
 
 document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
     mostrarSeccion('nueva')

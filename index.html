@@ -28,8 +28,7 @@
                 <li class="pure-menu-item"><a href="#remesas" class="pure-menu-link">Listado de Remesas</a></li>
                 <li class="pure-menu-item"><a href="#nueva" id="navNuevaBtn" class="pure-menu-link">Nueva Remesa</a></li>
                 <li class="pure-menu-item"><a href="#clientes" class="pure-menu-link">Listado de Clientes</a></li>
-                <li class="pure-menu-item"><a href="#subir" class="pure-menu-link">Actualizar Clientes</a></li>
-                <li class="pure-menu-item"><a href="#emisor" id="navEmisorBtn" class="pure-menu-link">Datos Emisor</a></li>
+                <li class="pure-menu-item"><a href="#config" id="navConfigBtn" class="pure-menu-link">Configuración</a></li>
             </ul>
         </div>
     </nav>
@@ -40,40 +39,11 @@
             <p>Bienvenido a Gestor de remesas, una aplicación para generar ficheros de remesas.</p>
         </section>
 
-        <section id="emisor">
-            <h2>Actualizar los Datos del Emisor</h2>
-            <form id="updateEmisorForm" method="post" class="pure-form pure-form-stacked">
-                <fieldset>
-                    <legend>Datos del Emisor</legend>
-                    <label for="EmisorInitgPtyNm">Nombre del Emisor</label>
-                    <input type="text" id="EmisorInitgPtyNm" class="pure-input-2-3" />
-                    <label for="EmisorInitgPtyId">Id del Emisor</label>
-                    <input type="text" id="EmisorInitgPtyId" class="pure-input-2-3" />
-                    <label for="EmisorCdtrAcct">Cuenta de Abono del Emisor</label>
-                    <input type="text" id="EmisorCdtrAcct" class="pure-input-2-3" />
-                    <label for="EmisorCdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
-                    <input type="text" id="EmisorCdtrAgtBIC" class="pure-input-2-3" />
-                    <p>&nbsp;</p>
-                    <button id="updateEmisorBtn" type="submit" class="pure-button pure-button-primary">Actualizar</button>
-                </fieldset>
-            </form>
-        </section>
-
         <section id="remesas">
             <h2>Listado de Remesas</h2>
             <div id="dataRemesasContainer"></div>
             <p>&nbsp;</p>
             <button href="#nueva" id="irNuevaRemesaBtn" class="pure-button pure-button-primary">Nueva Remesa</button>
-        </section>
-
-        <section id="subir">
-            <h2>Actualizar el Listado de Clientes</h2>
-            <div id="progressBarClientesContainer"></div>
-            <div class="inputFileWrap">
-                <label class="pure-button pure-button-primary" for="fileClientesInput">Seleccionar Fichero</label>
-                <input id="fileClientesInput" type="file" >
-            </div>
-            <button type="submit" id="uploadClientesBtn" class="pure-button pure-button-primary">Subir</button>
         </section>
 
         <section id="clientes">
@@ -116,6 +86,34 @@
                     <button id="nuevaRemesaBtn" type="submit" class="pure-button pure-button-primary">Grabar remesa</button>
                 </fieldset>
             </form>
+        </section>
+
+        <section id="config">
+            <h2>Configuración</h2>
+            <hr />
+            <h3>Actualizar los Datos del Emisor</h3>
+            <form id="updateEmisorForm" method="post" class="pure-form pure-form-stacked">
+                <fieldset>
+                    <legend>Datos del Emisor</legend>
+                    <label for="EmisorInitgPtyNm">Nombre del Emisor</label>
+                    <input type="text" id="EmisorInitgPtyNm" class="pure-input-2-3" />
+                    <label for="EmisorInitgPtyId">Id del Emisor</label>
+                    <input type="text" id="EmisorInitgPtyId" class="pure-input-2-3" />
+                    <label for="EmisorCdtrAcct">Cuenta de Abono del Emisor</label>
+                    <input type="text" id="EmisorCdtrAcct" class="pure-input-2-3" />
+                    <label for="EmisorCdtrAgtBIC">BIC de la Cuenta de Abono del Emisor</label>
+                    <input type="text" id="EmisorCdtrAgtBIC" class="pure-input-2-3" />
+                    <p>&nbsp;</p>
+                    <button id="updateEmisorBtn" type="submit" class="pure-button pure-button-primary">Actualizar</button>
+                </fieldset>
+            </form>
+            <hr />
+            <h3>Actualizar el Listado de Clientes</h3>
+            <div class="inputFileWrap">
+                <label class="pure-button pure-button-primary" for="fileClientesInput">Seleccionar Fichero</label>
+                <input id="fileClientesInput" type="file" >
+            </div>
+            <button type="submit" id="uploadClientesBtn" class="pure-button pure-button-primary">Subir</button>
         </section>
     </main>
 </div>
