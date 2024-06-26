@@ -921,3 +921,13 @@ function formatSEPA(xmlDoc, FicheroID) {
 
     return JSON.stringify(sepaData, null, 2);
 }
+
+const seqDate = MCDatepicker.create({
+    el: '#SeqDate',
+    bodyType: 'modal',
+    dateFormat: 'dd/mm/yyyy',
+    autoClose: true,
+    closeOndblclick: true,
+    closeOnBlur: true
+})
+document.getElementById('SeqDateBtn').onclick = () => seqDate.open();
