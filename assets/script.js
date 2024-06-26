@@ -102,8 +102,9 @@ document.getElementById('uploadClientesBtn').addEventListener('click', function(
         reader.onload = function(e) {
             const text = e.target.result
             const data = parseCSV(text, ['nombre', 'iban', 'dato desconocido 1', 'domicilio', 'código postal y localidad', 'provincia', 'código de país', 'dato desconocido2', 'nif', 'fecha de inserción'])
-            saveData(data, 'clientes')
-            displayClientesData(data, headersClientes)
+            storedClientesData = data
+            saveData(storedClientesData, 'clientes')
+            displayClientesData(storedClientesData, headersClientes)
             Toast.fire({
                 icon: "success",
                 title: "Subido fichero de clientes",
