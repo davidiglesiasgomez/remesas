@@ -662,14 +662,23 @@ function editarRemesa(remesaFicheroId) {
 }
 
 function eliminarRemesa(remesaFicheroId) {
-    if (!confirm('¿Está seguro que quiere eliminar la remesa?')) {
-        return;
-    }
-    storedRemesasData = storedRemesasData.filter(remesa => remesa.FicheroID !== remesaFicheroId);
-
-    saveData(storedRemesasData, 'remesas')
-
-    displayRemesasData(storedRemesasData, headersRemesas)
+    Swal.fire({
+        title: "¿Está seguro que quiere eliminar la remesa?",
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            storedRemesasData = storedRemesasData.filter(remesa => remesa.FicheroID !== remesaFicheroId);
+            saveData(storedRemesasData, 'remesas')
+            displayRemesasData(storedRemesasData, headersRemesas)
+            Toast.fire({
+                icon: "success",
+                title: "Remesa eliminada",
+            })
+        }
+    })
 }
 
 function cargarRemesa(remesa) {
