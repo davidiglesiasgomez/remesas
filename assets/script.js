@@ -840,3 +840,81 @@ function comprobarRemesaFicheroIdExistente(remesaFicheroId) {
 // showToast("Do POTD and Earn Coins", "info", 5000);
 // showToast("Failed unexpected error", "danger", 5000);
 // showToast("!warning! server error", "warning", 5000);
+
+// Manejar la subida de fichero de remesa XML
+document.getElementById('uploadFicheroRemesaXmlBtn').addEventListener('click', function() {
+    Toast.fire({
+        icon: "info",
+        title: "Subiendo fichero XML de remesa...",
+    })
+    const fileFicheroRemesaXmlInput = document.getElementById('fileFicheroRemesaXmlInput')
+    const file = fileFicheroRemesaXmlInput.files[0]
+    if (file) {
+
+        const fileName = file.name
+        const fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.')) || fileName
+        console.log('fileNameWithoutExtension', fileNameWithoutExtension)
+
+        const reader = new FileReader()
+        reader.onload = function(e) {
+            const parser = new DOMParser()
+            const xmlDoc = parser.parseFromString(e.target.result, "application/xml")
+
+            // Manejar errores de análisis
+            if (xmlDoc.getElementsByTagName('parsererror').length) {
+                Toast.fire({
+                    icon: "error",
+                    title: "Error al parsear el XML",
+                })
+                return
+            }
+
+            console.log('xmlDoc', formatSEPA(xmlDoc, fileNameWithoutExtension))
+
+            Toast.fire({
+                icon: "success",
+                title: "Subido fichero XML de remesa",
+            })
+        }
+        reader.readAsText(file)
+    }
+})
+
+function formatSEPA(xmlDoc, FicheroID) {
+    const sepaData = {};
+
+    sepaData.FicheroID = FicheroID
+
+    const grpHdr = xmlDoc.getElementsByTagName('GrpHdr')[0];
+    if (grpHdr) {
+        sepaData.MsgId = grpHdr.getElementsByTagName('MsgId')[0].textContent;
+        sepaData.CreDtTm = grpHdr.getElementsByTagName('CreDtTm')[0].textContent;
+        sepaData.NbOfTxs = grpHdr.getElementsByTagName('NbOfTxs')[0].textContent;
+        sepaData.CtrlSum = grpHdr.getElementsByTagName('CtrlSum')[0].textContent;
+        const initgPty = grpHdr.getElementsByTagName('InitgPty')[0];
+        if (initgPty) {
+            sepaData.InitgPtyNm = initgPty.getElementsByTagName('Nm')[0].textContent;
+            sepaData.InitgPtyId = initgPty.getElementsByTagName('Id')[0].textContent;
+        }
+    }
+
+    const pmtInf = xmlDoc.getElementsByTagName('PmtInf')[0];
+    if (pmtInf) {
+        sepaData.PmtInfId = pmtInf.getElementsByTagName('PmtInfId')[0].textContent;
+        sepaData.PmtMtd = pmtInf.getElementsByTagName('PmtMtd')[0].textContent;
+        sepaData.BtchBookg = pmtInf.getElementsByTagName('BtchBookg')[0].textContent;
+        sepaData.NbOfTxs = pmtInf.getElementsByTagName('NbOfTxs')[0].textContent;
+        sepaData.CtrlSum = pmtInf.getElementsByTagName('CtrlSum')[0].textContent;
+        sepaData.SvcLvlCd = pmtInf.getElementsByTagName('SvcLvl')[0].getElementsByTagName('Cd')[0].textContent;
+        sepaData.LclInstrmCd = pmtInf.getElementsByTagName('LclInstrm')[0].getElementsByTagName('Cd')[0].textContent;
+        sepaData.SeqTp = pmtInf.getElementsByTagName('SeqTp')[0].textContent;
+        sepaData.CdtrNm = pmtInf.getElementsByTagName('Cdtr')[0].getElementsByTagName('Nm')[0].textContent;
+        sepaData.CdtrAcct = pmtInf.getElementsByTagName('CdtrAcct')[0].getElementsByTagName('IBAN')[0].textContent;
+        sepaData.CdtrAgt = pmtInf.getElementsByTagName('CdtrAgt')[0].getElementsByTagName('BIC')[0].textContent;
+        sepaData.ChrgBr = pmtInf.getElementsByTagName('ChrgBr')[0].textContent;
+        sepaData.CdtrSchmeId = pmtInf.getElementsByTagName('CdtrSchmeId')[0].getElementsByTagName('Id')[0].textContent;
+        sepaData.CdtrSchmePrtry = pmtInf.getElementsByTagName('Prtry')[0].textContent;
+    }
+
+    return JSON.stringify(sepaData, null, 2);
+}
