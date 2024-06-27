@@ -313,7 +313,7 @@ function insertarRecibo(contador, recibo={}) {
     const formRecibo = '' +
     '<p>' +
     '<span id="LabelRecibo' + contador + '" class="labelRecibo">Recibo #' + contador + '</span>' +
-    ' ' + 
+    ' ' +
     '<button type="button" class="btnEliminarRecibo" contador="' + contador + '" title="Eliminar Recibo">🗑️</button>' +
     '</p>' +
     '<div class="form-field">' +
@@ -458,7 +458,7 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     })
 
     const data = new FormData(e.target)
-    const dataObject = {}
+    let dataObject = {}
 
     data.forEach((value, key) => {
         const keys = key.match(/[^[\]]+/g)
@@ -484,6 +484,34 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
         icon: "info",
         title: "Validando la información de la remesa",
     })
+
+    dataObject = completarDatosEditorRemesa(dataObject)
+
+    try {
+        document.querySelectorAll('.has-error').forEach((element) => {
+            element.classList.remove('has-error')
+        })
+        validarDatosEditorRemesa(dataObject)
+
+    } catch (error) {
+        Toast.fire({
+            icon: "error",
+            title: error.message,
+        })
+        if (error.errores.FicheroID) document.getElementById('FicheroID').classList.add('has-error')
+        if (error.errores.SeqDate) document.getElementById('SeqDate').classList.add('has-error')
+        if (error.errores.recibos.length) {
+            document.querySelectorAll('div.recibo').forEach((element, index) => {
+                let contador = element.getAttribute('contador')
+                if (error.errores.recibos[index]) {
+                    if (error.errores.recibos[index].Identificador) document.getElementById('Identificador' + contador).classList.add('has-error')
+                    if (error.errores.recibos[index].Ustrd) document.getElementById('Ustrd' + contador).classList.add('has-error')
+                    if (error.errores.recibos[index].InstdAmt) document.getElementById('InstdAmt' + contador).classList.add('has-error')
+                }
+            })
+        }
+        return
+    }
 
     // Almacenar remesa actual
     saveData(dataObject, 'actual')
@@ -931,3 +959,108 @@ const seqDate = MCDatepicker.create({
     closeOnBlur: true
 })
 document.getElementById('SeqDateBtn').onclick = () => seqDate.open();
+
+function completarDatosEditorRemesa(remesa) {
+
+    let now = new Date();
+    console.log('completarDatosEditorRemesa', 'now', now)
+    // let CreationDate = now.getFullYear()+(now.getMonth()+1).toString(10).padStart(2,"0")+now.getDate().toString(10).padStart(2,"0")+now.getHours().toString(10).padStart(2,"0")+now.getMinutes().toString(10).padStart(2,"0")+now.getSeconds().toString(10).padStart(2,"0")+now.getMilliseconds().toString(10).padStart(3,"0")+"00";
+    let CreationDate = formatDateToISO(now);
+    console.log('completarDatosEditorRemesa', 'CreationDate', CreationDate)
+
+    remesa.CreationDate = ( remesa.CreationDate ? remesa.CreationDate : CreationDate )
+
+    recalcularTotalRecibos()
+
+    console.log('completarDatosEditorRemesa', 'remesa', remesa)
+    return remesa
+}
+
+function validarDatosEditorRemesa(remesa) {
+    let errores = {}
+    let error = false
+
+    if (remesa.FicheroID === '') {
+        errores.FicheroID = 'El fichero de remesa es obligatorio'
+        error = true
+    }
+
+    if (remesa.SeqDate === '') {
+        errores.SeqDate = 'Es necesario indicar la fecha de efecto'
+        error = true
+    }
+
+    if (remesa.SeqDate !== '' && !isValidDate(remesa.SeqDate)) {
+        errores.SeqDate = 'El formato de la fecha de efecto no es correcto'
+        error = true
+    }
+
+    errores.recibos = []
+    if (remesa.recibos.length > 0) {
+        remesa.recibos.forEach((recibo, index) => {
+            errores['recibos'][index] = {}
+            if (recibo.Identificador === '') {
+                errores['recibos'][index]['Identificador'] = 'El identificador del cliente es obligatorio'
+                error = true
+            }
+            if (recibo.Ustrd === '') {
+                errores['recibos'][index]['Ustrd'] = 'El concepto es obligatorio'
+                error = true
+            }
+            if (recibo.InstdAmt === '') {
+                errores['recibos'][index]['InstdAmt'] = 'El importe es obligatorio'
+                error = true
+            }
+        })
+    }
+
+    if (error) {
+        const error = new Error('Datos de la remesa incorrectos');
+        Object.assign(error, { errores: errores });
+        throw error;
+    }
+
+    return true
+}
+
+function formatDateToISO(date) {
+    const pad = (num) => (num < 10 ? '0' + num : num);
+
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1); // Los meses comienzan en 0
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
+function isValidDate(dateString) {
+    // Verifica el formato inicial con una expresión regular
+    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+    if (!regex.test(dateString)) {
+        return false;
+    }
+
+    // Extrae las partes de la fecha
+    const [_, day, month, year] = dateString.match(regex);
+
+    // Convierte a números
+    const dayNum = parseInt(day, 10);
+    const monthNum = parseInt(month, 10);
+    const yearNum = parseInt(year, 10);
+
+    // Verifica el rango de los valores
+    if (yearNum < 1000 || yearNum > 9999 || monthNum < 1 || monthNum > 12) {
+        return false;
+    }
+
+    // Verifica el número de días en el mes
+    const daysInMonth = new Date(yearNum, monthNum, 0).getDate();
+    if (dayNum < 1 || dayNum > daysInMonth) {
+        return false;
+    }
+
+    return true;
+}

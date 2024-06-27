@@ -116,3 +116,8 @@ div.inputFileWrap input[type="file"] {
         margin: .7em 0 0;
     }
 }
+
+/* Resaltado de errores */
+input[type="text"].has-error {
+    border: 1px solid red;
+}
