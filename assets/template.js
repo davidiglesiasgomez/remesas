@@ -58,8 +58,8 @@ let content = `<?xml version="1.0" encoding="UTF-8"?>
     </GrpHdr>
     <PmtInf>
       <PmtInfId>{PmtInfId}</PmtInfId>
-      <PmtMtd>DD</PmtMtd>
-      <BtchBookg>true</BtchBookg>
+      <PmtMtd>{PmtMtd}</PmtMtd>
+      <BtchBookg>{BtchBookg}</BtchBookg>
       <NbOfTxs>{NumRows}</NbOfTxs>
       <CtrlSum>{CtrlSum}</CtrlSum>
       <PmtTpInf>
@@ -86,7 +86,7 @@ let content = `<?xml version="1.0" encoding="UTF-8"?>
           <BIC>{CdtrAgtBIC}</BIC>
         </FinInstnId>
       </CdtrAgt>
-      <ChrgBr>SLEV</ChrgBr>
+      <ChrgBr>{ChrgBr}</ChrgBr>
       <CdtrSchmeId>
         <Id>
           <PrvtId>

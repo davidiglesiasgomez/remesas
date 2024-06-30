@@ -776,28 +776,36 @@ function mostrarSeccion(seccionId) {
 function descargarRemesa(remesaFicheroId) {
     actualRemesaData = storedRemesasData.find(remesa => remesa.FicheroID === remesaFicheroId)
 
-    let now = new Date();
-    let nowString = now.getFullYear()+(now.getMonth()+1).toString(10).padStart(2,"0")+now.getDate().toString(10).padStart(2,"0")+now.getHours().toString(10).padStart(2,"0")+now.getMinutes().toString(10).padStart(2,"0")+now.getSeconds().toString(10).padStart(2,"0")+now.getMilliseconds().toString(10).padStart(3,"0")+"00";
-
     // Realizar sustituciones (si es necesario)
     xmlContent = content;
-	xmlContent = xmlContent.replace(/{MessageId}/g, "PRE" + nowString + actualRemesaData.FicheroID.padStart(13, '0').toUpperCase() );
-	xmlContent = xmlContent.replace(/{CreationDate}/g, '');
-	xmlContent = xmlContent.replace(/{PmtInfId}/g, '');
-	xmlContent = xmlContent.replace(/{SeqDate}/g, '');
+	xmlContent = xmlContent.replace(/{MessageId}/g, actualRemesaData.MessageID);
+	xmlContent = xmlContent.replace(/{CreationDate}/g, actualRemesaData.CreationDate);
+	xmlContent = xmlContent.replace(/{NumRows}/g, actualRemesaData.NumRows)
+	xmlContent = xmlContent.replace(/{CtrlSum}/g, convertirImporte(actualRemesaData.CtrlSum))
 	xmlContent = xmlContent.replace(/{InitgPtyNm}/g, actualRemesaData.InitgPtyNm)
 	xmlContent = xmlContent.replace(/{InitgPtyId}/g, actualRemesaData.InitgPtyId)
+    xmlContent = xmlContent.replace(/{PmtInfId}/g, actualRemesaData.PmtInfId);
+    xmlContent = xmlContent.replace(/{PmtMtd}/g, actualRemesaData.PmtMtd);
+    xmlContent = xmlContent.replace(/{BtchBookg}/g, actualRemesaData.BtchBookg);
+    xmlContent = xmlContent.replace(/{SvcLvlCd}/g, actualRemesaData.SvcLvlCd);
+    xmlContent = xmlContent.replace(/{LclInstrmCd}/g, actualRemesaData.LclInstrmCd);
+    xmlContent = xmlContent.replace(/{SeqTp}/g, actualRemesaData.SeqTp);
+	xmlContent = xmlContent.replace(/{SeqDate}/g, convertirFecha(actualRemesaData.SeqDate));
 	xmlContent = xmlContent.replace(/{CdtrAcct}/g, actualRemesaData.CdtrAcct)
+	xmlContent = xmlContent.replace(/{Ccy}/g, actualRemesaData.Ccy)
 	xmlContent = xmlContent.replace(/{CdtrAgtBIC}/g, actualRemesaData.CdtrAgtBIC)
-	xmlContent = xmlContent.replace(/{CtrlSum}/g, convertirImporte(actualRemesaData.CtrlSum))
-	xmlContent = xmlContent.replace(/{NumRows}/g, actualRemesaData.NumRows)
+	xmlContent = xmlContent.replace(/{ChrgBr}/g, actualRemesaData.ChrgBr)
+	xmlContent = xmlContent.replace(/{Prtry}/g, actualRemesaData.Prtry)
     actualRemesaData.recibos.forEach((recibo, index) => {
         xmlRow = row
-        xmlRow = xmlRow.replace(/{InstrId}/g, '');
-        xmlRow = xmlRow.replace(/{EndToEndId}/g, '');
+        xmlRow = xmlRow.replace(/{InstrId}/g, recibo.InstrId);
+        xmlRow = xmlRow.replace(/{EndToEndId}/g, recibo.EndToEndId);
+        xmlRow = xmlRow.replace(/{Ccy}/g, recibo.Ccy);
         xmlRow = xmlRow.replace(/{InstdAmt}/g, convertirImporte(recibo.InstdAmt));
         xmlRow = xmlRow.replace(/{MndtId}/g, recibo.MndtId);
         xmlRow = xmlRow.replace(/{DtOfSgntr}/g, convertirFecha(recibo.DtOfSgntr));
+        xmlRow = xmlRow.replace(/{AmdmntInd}/g, recibo.AmdmntInd);
+        xmlRow = xmlRow.replace(/{FinInstnId}/g, recibo.FinInstnId);
         xmlRow = xmlRow.replace(/{Nm}/g, recibo.Nm);
         xmlRow = xmlRow.replace(/{Ctry}/g, recibo.Ctry);
         xmlRow = xmlRow.replace(/{AdrLine_1}/g, recibo.AdrLine1_);
@@ -990,6 +998,7 @@ function completarDatosEditorRemesa(remesa) {
     remesa.LclInstrmCd = 'CORE'
     remesa.SeqTp = 'RCUR'
     remesa.Ccy = 'EUR'
+    remesa.ChrgBr = 'SLEV'
     remesa.Prtry = 'SEPA'
 
     if (remesa.recibos.length > 0) {
