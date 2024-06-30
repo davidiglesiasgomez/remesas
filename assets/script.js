@@ -746,7 +746,7 @@ function cargarRemesa(remesa) {
     document.getElementById('FicheroID').value = remesa.FicheroID || ''
     document.getElementById('NumRows').value = remesa.NumRows || 0
     document.getElementById('CtrlSum').value = remesa.CtrlSum || 0.0
-    document.getElementById('SeqDate').value = remesa.SeqDate || ''
+    document.getElementById('SeqDate').value = remesa.SeqDate || obtenerSiguienteDiaLaborable().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
     document.getElementById('contadorRecibosRemesa').value = 0
     document.getElementById('recibosRemesaLista').innerHTML = ''
     if (typeof remesa.recibos === 'object' && remesa.recibos.length) {
@@ -1245,4 +1245,36 @@ function generarEndToEndId(remesa, index) {
 
     // Concatenar los componentes en el formato deseado
     return ` ${year}${month}${day}${hours}${minutes}${seconds}${suffix}`
+}
+
+function obtenerSiguienteDiaLaborable(date) {
+
+    date = date || new Date()
+
+    // Crear una nueva instancia de la fecha para no modificar la original
+    let nextDate = new Date(date);
+
+    // Lista de festivos en formato "MM-DD"
+    const holidays = [
+        "01-01", "01-06", "05-01", "05-17", "07-25",
+        "08-15", "08-16", "11-01", "12-06", "12-08", "12-25"
+    ];
+
+    // Función para comprobar si una fecha es festivo
+    function isHoliday(date) {
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const formattedDate = `${month}-${day}`;
+        return holidays.includes(formattedDate);
+    }
+
+    // Avanzar un día
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    // Mientras sea sábado (6), domingo (0) o festivo, avanzar un día más
+    while (nextDate.getDay() === 0 || nextDate.getDay() === 6 || isHoliday(nextDate)) {
+        nextDate.setDate(nextDate.getDate() + 1);
+    }
+
+    return nextDate;
 }
