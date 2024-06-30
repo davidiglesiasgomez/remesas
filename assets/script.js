@@ -746,6 +746,7 @@ function cargarRemesa(remesa) {
     document.getElementById('FicheroID').value = remesa.FicheroID || ''
     document.getElementById('NumRows').value = remesa.NumRows || 0
     document.getElementById('CtrlSum').value = remesa.CtrlSum || 0.0
+    document.getElementById('SeqDate').value = remesa.SeqDate || ''
     document.getElementById('contadorRecibosRemesa').value = 0
     document.getElementById('recibosRemesaLista').innerHTML = ''
     if (typeof remesa.recibos === 'object' && remesa.recibos.length) {
