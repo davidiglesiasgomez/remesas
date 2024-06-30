@@ -261,8 +261,26 @@ document.getElementById('updateEmisorForm').addEventListener('submit', function(
         'CdtrAcct': CdtrAcct,
         'CdtrAgtBIC': CdtrAgtBIC
     }
-    const item = 'emisor'
-    saveData(data, item)
+
+    try {
+        document.querySelectorAll('.has-error').forEach((element) => {
+            element.classList.remove('has-error')
+        })
+        validarDatosEmisor(data)
+
+    } catch (error) {
+        Toast.fire({
+            icon: "error",
+            title: error.message,
+        })
+        if (error.errores.InitgPtyNm) document.getElementById('EmisorInitgPtyNm').classList.add('has-error')
+        if (error.errores.InitgPtyId) document.getElementById('EmisorInitgPtyId').classList.add('has-error')
+        if (error.errores.CdtrAcct) document.getElementById('EmisorCdtrAcct').classList.add('has-error')
+        if (error.errores.CdtrAgtBIC) document.getElementById('EmisorCdtrAgtBIC').classList.add('has-error')
+        return
+    }
+
+    saveData(data, 'emisor')
     Toast.fire({
         icon: "success",
         title: "Datos del emisor grabados correctamente",
@@ -1062,4 +1080,37 @@ function isValidDate(dateString) {
     }
 
     return true;
+}
+
+function validarDatosEmisor(emisor) {
+    let errores = {}
+    let error = false
+
+    if (emisor.InitgPtyNm === '') {
+        errores.InitgPtyNm = 'El nombre del emisor es obligatorio'
+        error = true
+    }
+
+    if (emisor.InitgPtyId === '') {
+        errores.InitgPtyId = 'El identificador del emisor es obligatorio'
+        error = true
+    }
+
+    if (emisor.CdtrAcct === '') {
+        errores.CdtrAcct = 'La cuenta de abono del emisor es obligatoria'
+        error = true
+    }
+
+    if (emisor.CdtrAgtBIC === '') {
+        errores.CdtrAgtBIC = 'El BIC de la cuenta del emisor es obligatorio'
+        error = true
+    }
+
+    if (error) {
+        const error = new Error('Datos del emisor incorrectos');
+        Object.assign(error, { errores: errores });
+        throw error;
+    }
+
+    return true
 }
