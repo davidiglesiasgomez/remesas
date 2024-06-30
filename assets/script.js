@@ -33,17 +33,16 @@ var actualRemesaData = {}
 
 // Esperamos a que el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Mostrar los datos almacenados si existen
-    storedClientesData = JSON.parse(localStorage.getItem('clientes'));
-    storedRemesasData = JSON.parse(localStorage.getItem('remesas'));
-    storedEmisorData = JSON.parse(localStorage.getItem('emisor'));
-    actualRemesaData = JSON.parse(localStorage.getItem('actual'));
-    if (storedClientesData) {
-        displayClientesData(storedClientesData, headersClientes);
-    }
-    if (storedRemesasData) {
-        displayRemesasData(storedRemesasData, headersRemesas);
-    }
+
+    // Cargar los datos almacenados si existen
+    storedClientesData = JSON.parse(localStorage.getItem('clientes'))
+    storedRemesasData = JSON.parse(localStorage.getItem('remesas'))
+    storedEmisorData = JSON.parse(localStorage.getItem('emisor'))
+    actualRemesaData = JSON.parse(localStorage.getItem('actual'))
+
+    // Mostrar los datos
+    displayClientesData(( storedClientesData ? storedClientesData : [] ), headersClientes)
+    displayRemesasData(( storedRemesasData ? storedRemesasData : [] ), headersRemesas)
     if (storedEmisorData) {
         document.getElementById('EmisorInitgPtyNm').value = storedEmisorData.InitgPtyNm || ''
         document.getElementById('EmisorInitgPtyId').value = storedEmisorData.InitgPtyId || ''
