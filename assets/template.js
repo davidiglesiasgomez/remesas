@@ -3,18 +3,18 @@ let row = `      <DrctDbtTxInf>
           <InstrId>{InstrId}</InstrId>
           <EndToEndId>{EndToEndId}</EndToEndId>
         </PmtId>
-        <InstdAmt Ccy="EUR">{InstdAmt}</InstdAmt>
+        <InstdAmt Ccy="{Ccy}">{InstdAmt}</InstdAmt>
         <DrctDbtTx>
           <MndtRltdInf>
             <MndtId>{MndtId}</MndtId>
             <DtOfSgntr>{DtOfSgntr}</DtOfSgntr>
-            <AmdmntInd>false</AmdmntInd>
+            <AmdmntInd>{AmdmntInd}</AmdmntInd>
           </MndtRltdInf>
         </DrctDbtTx>
         <DbtrAgt>
           <FinInstnId>
             <Othr>
-              <Id>NOTPROVIDED</Id>
+              <Id>{FinInstnId}</Id>
             </Othr>
           </FinInstnId>
         </DbtrAgt>
@@ -64,12 +64,12 @@ let content = `<?xml version="1.0" encoding="UTF-8"?>
       <CtrlSum>{CtrlSum}</CtrlSum>
       <PmtTpInf>
         <SvcLvl>
-          <Cd>SEPA</Cd>
+          <Cd>{SvcLvlCd}</Cd>
         </SvcLvl>
         <LclInstrm>
-          <Cd>CORE</Cd>
+          <Cd>{LclInstrmCd}</Cd>
         </LclInstrm>
-        <SeqTp>RCUR</SeqTp>
+        <SeqTp>{SeqTp}</SeqTp>
       </PmtTpInf>
       <ReqdColltnDt>{SeqDate}</ReqdColltnDt>
       <Cdtr>
@@ -79,7 +79,7 @@ let content = `<?xml version="1.0" encoding="UTF-8"?>
         <Id>
           <IBAN>{CdtrAcct}</IBAN>
         </Id>
-        <Ccy>EUR</Ccy>
+        <Ccy>{Ccy}</Ccy>
       </CdtrAcct>
       <CdtrAgt>
         <FinInstnId>
@@ -93,7 +93,7 @@ let content = `<?xml version="1.0" encoding="UTF-8"?>
             <Othr>
               <Id>{InitgPtyId}</Id>
               <SchmeNm>
-                <Prtry>SEPA</Prtry>
+                <Prtry>{Prtry}</Prtry>
               </SchmeNm>
             </Othr>
           </PrvtId>

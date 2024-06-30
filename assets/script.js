@@ -744,8 +744,8 @@ function cargarRemesa(remesa) {
     document.getElementById('FicheroIDDate').value = remesa.FicheroIDDate || ''
     document.getElementById('FicheroIDPicker').value = remesa.FicheroIDPicker || ''
     document.getElementById('FicheroID').value = remesa.FicheroID || ''
-    document.getElementById('NumRows').value = remesa.NumRows || ''
-    document.getElementById('CtrlSum').value = remesa.CtrlSum || ''
+    document.getElementById('NumRows').value = remesa.NumRows || 0
+    document.getElementById('CtrlSum').value = remesa.CtrlSum || 0.0
     document.getElementById('contadorRecibosRemesa').value = 0
     document.getElementById('recibosRemesaLista').innerHTML = ''
     if (typeof remesa.recibos === 'object' && remesa.recibos.length) {
@@ -978,18 +978,32 @@ const seqDate = MCDatepicker.create({
 document.getElementById('SeqDateBtn').onclick = () => seqDate.open();
 
 function completarDatosEditorRemesa(remesa) {
+    let referenceDate = new Date()
+    remesa.referenceDate = referenceDate
 
-    let now = new Date();
-    console.log('completarDatosEditorRemesa', 'now', now)
-    // let CreationDate = now.getFullYear()+(now.getMonth()+1).toString(10).padStart(2,"0")+now.getDate().toString(10).padStart(2,"0")+now.getHours().toString(10).padStart(2,"0")+now.getMinutes().toString(10).padStart(2,"0")+now.getSeconds().toString(10).padStart(2,"0")+now.getMilliseconds().toString(10).padStart(3,"0")+"00";
-    let CreationDate = formatDateToISO(now);
-    console.log('completarDatosEditorRemesa', 'CreationDate', CreationDate)
+    remesa.CreationDate = ( remesa.CreationDate ? remesa.CreationDate : formatDateToISO(remesa.referenceDate) )
+    remesa.MessageID = ( remesa.MessageID ? remesa.MessageID : generarMessageID(remesa) )
+    remesa.PmtInfId = ( remesa.PmtInfId ? remesa.PmtInfId : generarPmtInfId(remesa) )
+    remesa.PmtMtd = 'DD'
+    remesa.BtchBookg = 'true'
+    remesa.SvcLvlCd = 'SEPA'
+    remesa.LclInstrmCd = 'CORE'
+    remesa.SeqTp = 'RCUR'
+    remesa.Ccy = 'EUR'
+    remesa.Prtry = 'SEPA'
 
-    remesa.CreationDate = ( remesa.CreationDate ? remesa.CreationDate : CreationDate )
+    if (remesa.recibos.length > 0) {
+        remesa.recibos.forEach((recibo, index) => {
+            remesa.recibos[index].InstrId = ( remesa.recibos[index].InstrId ? remesa.recibos[index].InstrId : generarInstrId(remesa, index) )
+            remesa.recibos[index].EndToEndId = ( remesa.recibos[index].EndToEndId ? remesa.recibos[index].EndToEndId : generarEndToEndId(remesa, index) )
+            remesa.recibos[index].Ccy = 'EUR'
+            remesa.recibos[index].AmdmntInd = 'false'
+            remesa.recibos[index].FinInstnId = 'NOTPROVIDED'
+        })
+    }
 
     recalcularTotalRecibos()
 
-    console.log('completarDatosEditorRemesa', 'remesa', remesa)
     return remesa
 }
 
@@ -1113,4 +1127,112 @@ function validarDatosEmisor(emisor) {
     }
 
     return true
+}
+
+function generarMessageID(remesa) {
+
+    // Función para añadir ceros a la izquierda si es necesario
+    const pad = (number, length) => {
+        return number.toString().padStart(length, '0')
+    }
+
+    //
+    const fecha = new Date(remesa.referenceDate)
+
+    // Extraer los componentes de la fecha
+    const year = fecha.getFullYear()
+    const month = pad(fecha.getMonth() + 1, 2) // Los meses empiezan desde 0
+    const day = pad(fecha.getDate(), 2)
+    const hours = pad(fecha.getHours(), 2)
+    const minutes = pad(fecha.getMinutes(), 2)
+    const seconds = pad(fecha.getSeconds(), 2)
+    const milliseconds = pad(fecha.getMilliseconds(), 3)
+
+    // Parte final
+    const id = remesa.InitgPtyId.slice(-12)
+
+    // Concatenar los componentes en el formato deseado
+    return `PRE${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}${id}`
+}
+
+function generarPmtInfId(remesa) {
+
+    // Función para añadir ceros a la izquierda si es necesario
+    const pad = (number, length) => {
+        return number.toString().padStart(length, '0')
+    }
+
+    //
+    const fecha = new Date(remesa.referenceDate)
+    fecha.setSeconds(fecha.getSeconds() + 1)
+
+    // Extraer los componentes de la fecha
+    const year = fecha.getFullYear()
+    const month = pad(fecha.getMonth() + 1, 2) // Los meses empiezan desde 0
+    const day = pad(fecha.getDate(), 2)
+    const hours = pad(fecha.getHours(), 2)
+    const minutes = pad(fecha.getMinutes(), 2)
+    const seconds = pad(fecha.getSeconds(), 2)
+
+    // Parte inicial
+    const id = remesa.InitgPtyId
+
+    // Parte final
+    const suffix = pad(1, 4)
+
+    // Concatenar los componentes en el formato deseado
+    return `${id}${year}${month}${day}${hours}${minutes}${seconds}${suffix}`
+}
+
+function generarInstrId(remesa, index) {
+    // -20240609224720-0001
+
+    // Función para añadir ceros a la izquierda si es necesario
+    const pad = (number, length) => {
+        return number.toString().padStart(length, '0')
+    }
+
+    //
+    const fecha = new Date(remesa.referenceDate)
+    fecha.setSeconds(fecha.getSeconds() + 1)
+
+    // Extraer los componentes de la fecha
+    const year = fecha.getFullYear()
+    const month = pad(fecha.getMonth() + 1, 2) // Los meses empiezan desde 0
+    const day = pad(fecha.getDate(), 2)
+    const hours = pad(fecha.getHours(), 2)
+    const minutes = pad(fecha.getMinutes(), 2)
+    const seconds = pad(fecha.getSeconds(), 2)
+
+    // Parte final
+    const suffix = pad(index + 1, 4)
+
+    // Concatenar los componentes en el formato deseado
+    return `-${year}${month}${day}${hours}${minutes}${seconds}-${suffix}`
+}
+
+function generarEndToEndId(remesa, index) {
+    //  202406092247190001
+
+    // Función para añadir ceros a la izquierda si es necesario
+    const pad = (number, length) => {
+        return number.toString().padStart(length, '0')
+    }
+
+    //
+    const fecha = new Date(remesa.referenceDate)
+
+    // Extraer los componentes de la fecha
+    const year = fecha.getFullYear()
+    const month = pad(fecha.getMonth() + 1, 2) // Los meses empiezan desde 0
+    const day = pad(fecha.getDate(), 2)
+    const hours = pad(fecha.getHours(), 2)
+    const minutes = pad(fecha.getMinutes(), 2)
+    const seconds = pad(fecha.getSeconds(), 2)
+
+    // Parte final
+    const suffix = pad(index + 1, 4)
+
+    // Concatenar los componentes en el formato deseado
+    return ` ${year}${month}${day}${hours}${minutes}${seconds}${suffix}`
 }
