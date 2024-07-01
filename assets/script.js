@@ -910,7 +910,6 @@ document.getElementById('uploadFicheroRemesaXmlBtn').addEventListener('click', f
 
         const fileName = file.name
         const fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.')) || fileName
-        console.log('fileNameWithoutExtension', fileNameWithoutExtension)
 
         const reader = new FileReader()
         reader.onload = function(e) {
@@ -926,7 +925,12 @@ document.getElementById('uploadFicheroRemesaXmlBtn').addEventListener('click', f
                 return
             }
 
-            console.log('xmlDoc', formatSEPA(xmlDoc, fileNameWithoutExtension))
+            actualRemesaData = convertirDeXmlARemesa(xmlDoc, fileNameWithoutExtension)
+
+            saveData(actualRemesaData, 'actual')
+            cargarRemesa(actualRemesaData)
+            document.getElementById('navNuevaBtn').innerHTML = 'Editar remesa'
+            mostrarSeccion('nueva')
 
             Toast.fire({
                 icon: "success",
@@ -937,43 +941,73 @@ document.getElementById('uploadFicheroRemesaXmlBtn').addEventListener('click', f
     }
 })
 
-function formatSEPA(xmlDoc, FicheroID) {
-    const sepaData = {};
+function convertirDeXmlARemesa(xmlDoc, FicheroID) {
+    const sepaData = {}
 
     sepaData.FicheroID = FicheroID
 
-    const grpHdr = xmlDoc.getElementsByTagName('GrpHdr')[0];
+    const grpHdr = xmlDoc.getElementsByTagName('GrpHdr')[0]
     if (grpHdr) {
-        sepaData.MsgId = grpHdr.getElementsByTagName('MsgId')[0].textContent;
-        sepaData.CreDtTm = grpHdr.getElementsByTagName('CreDtTm')[0].textContent;
-        sepaData.NbOfTxs = grpHdr.getElementsByTagName('NbOfTxs')[0].textContent;
-        sepaData.CtrlSum = grpHdr.getElementsByTagName('CtrlSum')[0].textContent;
-        const initgPty = grpHdr.getElementsByTagName('InitgPty')[0];
+        sepaData.MsgId = grpHdr.getElementsByTagName('MsgId')[0].textContent
+        sepaData.CreDtTm = grpHdr.getElementsByTagName('CreDtTm')[0].textContent
+        sepaData.NbOfTxs = grpHdr.getElementsByTagName('NbOfTxs')[0].textContent
+        sepaData.CtrlSum = grpHdr.getElementsByTagName('CtrlSum')[0].textContent
+        const initgPty = grpHdr.getElementsByTagName('InitgPty')[0]
         if (initgPty) {
-            sepaData.InitgPtyNm = initgPty.getElementsByTagName('Nm')[0].textContent;
-            sepaData.InitgPtyId = initgPty.getElementsByTagName('Id')[0].textContent;
+            sepaData.InitgPtyNm = initgPty.getElementsByTagName('Nm')[0].textContent
+            sepaData.InitgPtyId = initgPty.getElementsByTagName('Id')[0].textContent
         }
     }
 
-    const pmtInf = xmlDoc.getElementsByTagName('PmtInf')[0];
+    const pmtInf = xmlDoc.getElementsByTagName('PmtInf')[0]
     if (pmtInf) {
-        sepaData.PmtInfId = pmtInf.getElementsByTagName('PmtInfId')[0].textContent;
-        sepaData.PmtMtd = pmtInf.getElementsByTagName('PmtMtd')[0].textContent;
-        sepaData.BtchBookg = pmtInf.getElementsByTagName('BtchBookg')[0].textContent;
-        sepaData.NbOfTxs = pmtInf.getElementsByTagName('NbOfTxs')[0].textContent;
-        sepaData.CtrlSum = pmtInf.getElementsByTagName('CtrlSum')[0].textContent;
-        sepaData.SvcLvlCd = pmtInf.getElementsByTagName('SvcLvl')[0].getElementsByTagName('Cd')[0].textContent;
-        sepaData.LclInstrmCd = pmtInf.getElementsByTagName('LclInstrm')[0].getElementsByTagName('Cd')[0].textContent;
-        sepaData.SeqTp = pmtInf.getElementsByTagName('SeqTp')[0].textContent;
-        sepaData.CdtrNm = pmtInf.getElementsByTagName('Cdtr')[0].getElementsByTagName('Nm')[0].textContent;
-        sepaData.CdtrAcct = pmtInf.getElementsByTagName('CdtrAcct')[0].getElementsByTagName('IBAN')[0].textContent;
-        sepaData.CdtrAgt = pmtInf.getElementsByTagName('CdtrAgt')[0].getElementsByTagName('BIC')[0].textContent;
-        sepaData.ChrgBr = pmtInf.getElementsByTagName('ChrgBr')[0].textContent;
-        sepaData.CdtrSchmeId = pmtInf.getElementsByTagName('CdtrSchmeId')[0].getElementsByTagName('Id')[0].textContent;
-        sepaData.CdtrSchmePrtry = pmtInf.getElementsByTagName('Prtry')[0].textContent;
+        sepaData.PmtInfId = pmtInf.getElementsByTagName('PmtInfId')[0].textContent
+        sepaData.PmtMtd = pmtInf.getElementsByTagName('PmtMtd')[0].textContent
+        sepaData.BtchBookg = pmtInf.getElementsByTagName('BtchBookg')[0].textContent
+        sepaData.SvcLvlCd = pmtInf.getElementsByTagName('SvcLvl')[0].getElementsByTagName('Cd')[0].textContent
+        sepaData.LclInstrmCd = pmtInf.getElementsByTagName('LclInstrm')[0].getElementsByTagName('Cd')[0].textContent
+        sepaData.SeqTp = pmtInf.getElementsByTagName('SeqTp')[0].textContent
+        sepaData.SeqDate = pmtInf.getElementsByTagName('ReqdColltnDt')[0].textContent
+        sepaData.CdtrAcct = pmtInf.getElementsByTagName('CdtrAcct')[0].getElementsByTagName('IBAN')[0].textContent
+        sepaData.Ccy = pmtInf.getElementsByTagName('CdtrAcct')[0].getElementsByTagName('Ccy')[0].textContent
+        sepaData.CdtrAgtBIC = pmtInf.getElementsByTagName('CdtrAgt')[0].getElementsByTagName('FinInstnId')[0].getElementsByTagName('BIC')[0].textContent
+        sepaData.ChrgBr = pmtInf.getElementsByTagName('ChrgBr')[0].textContent
+        sepaData.Prtry = pmtInf.getElementsByTagName('Prtry')[0].textContent
     }
 
-    return JSON.stringify(sepaData, null, 2);
+    const drctDbtTxInfs = xmlDoc.getElementsByTagName('DrctDbtTxInf')
+    sepaData.recibos = []
+    for (let i = 0; i < drctDbtTxInfs.length; i++) {
+        const drctDbtTxInf = drctDbtTxInfs[i]
+        const recibo = {}
+
+        recibo.InstrId = drctDbtTxInf.getElementsByTagName('PmtId')[0].getElementsByTagName('InstrId')[0].textContent
+        recibo.EndToEndId = drctDbtTxInf.getElementsByTagName('PmtId')[0].getElementsByTagName('EndToEndId')[0].textContent
+        recibo.Ccy = drctDbtTxInf.getElementsByTagName('InstdAmt')[0].getAttribute('Ccy')
+        recibo.InstdAmt = drctDbtTxInf.getElementsByTagName('InstdAmt')[0].textContent
+        recibo.MndtId = drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('MndtId')[0].textContent
+        recibo.DtOfSgntr = drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('DtOfSgntr')[0].textContent
+        recibo.AmdmntInd = drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('AmdmntInd')[0].textContent
+        recibo.FinInstnId = drctDbtTxInf.getElementsByTagName('DbtrAgt')[0].getElementsByTagName('FinInstnId')[0].textContent
+        recibo.Nm = drctDbtTxInf.getElementsByTagName('Dbtr')[0].getElementsByTagName('Nm')[0].textContent
+        recibo.Ctry = drctDbtTxInf.getElementsByTagName('Dbtr')[0].getElementsByTagName('PstlAdr')[0].getElementsByTagName('Ctry')[0].textContent
+        recibo.AdrLine1_ = drctDbtTxInf.getElementsByTagName('Dbtr')[0].getElementsByTagName('PstlAdr')[0].getElementsByTagName('AdrLine')[0].textContent
+        recibo.AdrLine2_ = drctDbtTxInf.getElementsByTagName('Dbtr')[0].getElementsByTagName('PstlAdr')[0].getElementsByTagName('AdrLine')[1].textContent
+        recibo.IBAN = drctDbtTxInf.getElementsByTagName('DbtrAcct')[0].getElementsByTagName('IBAN')[0].textContent
+        recibo.Ustrd = drctDbtTxInf.getElementsByTagName('RmtInf')[0].getElementsByTagName('Ustrd')[0].textContent
+        recibo.Identificador = `${recibo.MndtId} - ${recibo.Nm} - ${recibo.IBAN} - ${recibo.DtOfSgntr}`
+
+        sepaData.recibos.push(recibo)
+    }
+
+    sepaData.MessageID = sepaData.MsgId || ''
+    sepaData.CreationDate = sepaData.CreDtTm || ''
+    sepaData.NumRows = sepaData.NbOfTxs || 0
+    sepaData.CtrlSum = sepaData.CtrlSum || 0.0
+    sepaData.FicheroIDDate = extraerFechaDeFicheroID(sepaData.FicheroID) || ''
+    sepaData.FicheroIDPicker = formatearFechaADDMMYY(sepaData.FicheroIDDate) || ''
+
+    return sepaData
 }
 
 const seqDate = MCDatepicker.create({
@@ -996,7 +1030,7 @@ function completarDatosEditorRemesa(remesa) {
     remesa.PmtMtd = 'DD'
     remesa.BtchBookg = 'true'
     remesa.SvcLvlCd = 'SEPA'
-    remesa.LclInstrmCd = 'CORE'
+    remesa.LclInstrmCd = 'COR1'
     remesa.SeqTp = 'RCUR'
     remesa.Ccy = 'EUR'
     remesa.ChrgBr = 'SLEV'
@@ -1277,4 +1311,40 @@ function obtenerSiguienteDiaLaborable(date) {
     }
 
     return nextDate;
+}
+
+function extraerFechaDeFicheroID(code) {
+
+    // Remover la 'R' inicial
+    code = code.slice(1)
+
+    // Verificar si el código contiene una letra al final
+    let lastChar = code.slice(-1)
+    if (isNaN(lastChar)) {
+        // Remover la letra final
+        code = code.slice(0, -1)
+    }
+
+    // Extraer el día, mes y año
+    let day = parseInt(code.slice(0, 2), 10)
+    let month = parseInt(code.slice(2, 4), 10) - 1 // Meses comienzan desde 0 en JS
+    let year
+
+    // Verificar si hay un año presente
+    if (code.length === 6) {
+        year = parseInt('20' + code.slice(4, 6), 10) // Asumir año 2000+
+    } else {
+        // Si no hay año, asumir año actual
+        year = new Date().getFullYear()
+    }
+
+    // Crear el objeto Date
+    return new Date(year, month, day)
+}
+
+function formatearFechaADDMMYY(date) {
+    let day = date.getDate().toString().padStart(2, '0')
+    let month = (date.getMonth() + 1).toString().padStart(2, '0')
+    let year = date.getFullYear().toString().slice(-2)
+    return `${day} ${month} ${year}`
 }
