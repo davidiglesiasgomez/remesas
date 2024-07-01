@@ -353,7 +353,7 @@ function insertarRecibo(contador, recibo={}) {
     '<button type="button" class="btnConcepto" concepto="salud" contador="' + contador + '">⚕️ <span class="conceptoRemesa">Salud</span></button>' + '&nbsp;' +
     '<button type="button" class="btnConcepto" concepto="generica" contador="' + contador + '">❔ <span class="conceptoRemesa">Genérica</span></button>' + '&nbsp;' +
     '</label>' +
-    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-u-5-5" value="' + ( recibo.Ustrd || '' ) + '" />' +
+    '<input type="text" id="Ustrd' + contador + '" name="recibos[' + contador + '][Ustrd]" class="pure-u-5-5 Ustrd" value="' + ( recibo.Ustrd || '' ) + '" />' +
     '</div>' +
     '<div class="form-field">' +
     '<label for="InstdAmt' + contador + '" class="">Importe (€)</label>' +
@@ -424,6 +424,47 @@ function insertarRecibo(contador, recibo={}) {
         element.addEventListener('click', (event) => {
             rellenarConceptoRemesa(concepto, contadorRecibo)
         })
+    })
+
+    document.getElementById('Ustrd' + contador).addEventListener('click', function (event) {
+        const cursorPosition = event.target.selectionStart
+
+        let posicionPrimeraFecha = event.target.value.search(/\d{2}\/\d{2}\/\d{4}/)
+        let posicionSegundaFecha = ( posicionPrimeraFecha !== -1 ? event.target.value.slice(posicionPrimeraFecha + 10).search(/\d{2}\/\d{2}\/\d{4}/) : -1 )
+        posicionSegundaFecha = ( posicionSegundaFecha !== -1 ? posicionSegundaFecha + posicionPrimeraFecha + 10 : -1 )
+        let posicionNumeroPoliza = event.target.value.search(/POLIZA X-XX-#########/)
+        let posicionMatricula = event.target.value.search(/MATRICULA #### XXX/)
+
+        const pruebaPicker = MCDatepicker.create({
+            bodyType: 'modal',
+            dateFormat: 'dd/mm/yyyy',
+            autoClose: true,
+            closeOndblclick: true,
+            closeOnBlur: true
+        })
+
+        if (posicionPrimeraFecha !== -1 && cursorPosition>=posicionPrimeraFecha && cursorPosition<=posicionPrimeraFecha+10) {
+            let primeraFecha = event.target.value.slice(posicionPrimeraFecha, posicionPrimeraFecha+10)
+            pruebaPicker.setFullDate(new Date(convertirFecha(primeraFecha)))
+            pruebaPicker.onSelect((date, formatedDate) => {
+                event.target.value = event.target.value.replace(primeraFecha, formatedDate)
+            })
+            pruebaPicker.open()
+        }
+        if (posicionSegundaFecha !== -1 && cursorPosition>=posicionSegundaFecha && cursorPosition<=posicionSegundaFecha+10) {
+            let segundaFecha = event.target.value.slice(posicionSegundaFecha, posicionSegundaFecha+10)
+            pruebaPicker.setFullDate(new Date(convertirFecha(segundaFecha)))
+            pruebaPicker.onSelect((date, formatedDate) => {
+                event.target.value = event.target.value.replace(segundaFecha, formatedDate)
+            })
+            pruebaPicker.open()
+        }
+        if (posicionNumeroPoliza !== -1 && cursorPosition>=posicionNumeroPoliza && cursorPosition<=posicionNumeroPoliza+10) {
+            // console.log('Numero poliza')
+        }
+        if (posicionMatricula !== -1 && cursorPosition>=posicionMatricula && cursorPosition<=posicionMatricula+10) {
+            // console.log('Numero matricula')
+        }
     })
 }
 
