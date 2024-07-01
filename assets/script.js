@@ -987,7 +987,8 @@ function convertirDeXmlARemesa(xmlDoc, FicheroID) {
         recibo.Ccy = drctDbtTxInf.getElementsByTagName('InstdAmt')[0].getAttribute('Ccy')
         recibo.InstdAmt = drctDbtTxInf.getElementsByTagName('InstdAmt')[0].textContent
         recibo.MndtId = drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('MndtId')[0].textContent
-        recibo.DtOfSgntr = drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('DtOfSgntr')[0].textContent
+        const DtOfSgntr = new Date(drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('DtOfSgntr')[0].textContent)
+        recibo.DtOfSgntr = DtOfSgntr.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
         recibo.AmdmntInd = drctDbtTxInf.getElementsByTagName('DrctDbtTx')[0].getElementsByTagName('AmdmntInd')[0].textContent
         recibo.FinInstnId = drctDbtTxInf.getElementsByTagName('DbtrAgt')[0].getElementsByTagName('FinInstnId')[0].textContent
         recibo.Nm = drctDbtTxInf.getElementsByTagName('Dbtr')[0].getElementsByTagName('Nm')[0].textContent
