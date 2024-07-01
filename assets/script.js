@@ -534,16 +534,7 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
     saveData(dataObject, 'actual')
 
     // Almacenar remesa en la lista de remesas
-    if (storedRemesasData === null) {
-        storedRemesasData = []
-    }
-    const index = storedRemesasData.findIndex(remesa => remesa.FicheroID === dataObject.FicheroID);
-    if (index !== -1) {
-        storedRemesasData[index] = { ...storedRemesasData[index], ...dataObject };
-    } else {
-        storedRemesasData.push(dataObject)
-    }
-    saveData(storedRemesasData, 'remesas')
+    almacenarRemesa(dataObject)
 
     // Actualizar tabla
     displayRemesasData(storedRemesasData, headersRemesas);
@@ -925,12 +916,19 @@ document.getElementById('uploadFicheroRemesaXmlBtn').addEventListener('click', f
                 return
             }
 
-            actualRemesaData = convertirDeXmlARemesa(xmlDoc, fileNameWithoutExtension)
+            remesaData = convertirDeXmlARemesa(xmlDoc, fileNameWithoutExtension)
 
-            saveData(actualRemesaData, 'actual')
-            cargarRemesa(actualRemesaData)
-            document.getElementById('navNuevaBtn').innerHTML = 'Editar remesa'
-            mostrarSeccion('nueva')
+            // Almacenar remesa en la lista de remesas
+            almacenarRemesa(remesaData)
+
+            // Actualizar tabla
+            displayRemesasData(storedRemesasData, headersRemesas);
+
+            // Limpiar remesa actual
+            resetearRemesa()
+
+            // Ir al listado
+            mostrarSeccion('remesas')
 
             Toast.fire({
                 icon: "success",
@@ -1349,4 +1347,17 @@ function formatearFechaADDMMYY(date) {
     let month = (date.getMonth() + 1).toString().padStart(2, '0')
     let year = date.getFullYear().toString().slice(-2)
     return `${day} ${month} ${year}`
+}
+
+function almacenarRemesa(nuevaRemesa) {
+    if (storedRemesasData === null) {
+        storedRemesasData = []
+    }
+    const index = storedRemesasData.findIndex(remesa => remesa.FicheroID === nuevaRemesa.FicheroID);
+    if (index !== -1) {
+        storedRemesasData[index] = { ...storedRemesasData[index], ...nuevaRemesa };
+    } else {
+        storedRemesasData.push(nuevaRemesa)
+    }
+    saveData(storedRemesasData, 'remesas')
 }
