@@ -121,3 +121,8 @@ div.inputFileWrap input[type="file"] {
 input[type="text"].has-error {
     border: 1px solid red;
 }
+
+/* Celda actions */
+td.actions {
+    white-space: nowrap;
+}

@@ -642,7 +642,8 @@ function displayRemesasData(data, headers) {
             cell.textContent = item[key];
             row.appendChild(cell);
         });
-        const cell = document.createElement('td');
+        const cell = document.createElement('td')
+        cell.classList.add('actions')
         const editBtn = document.createElement('button')
         editBtn.classList.add('btnEditRemesa')
         editBtn.setAttribute('remesa', item.FicheroID)
