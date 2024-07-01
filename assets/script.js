@@ -967,7 +967,8 @@ function convertirDeXmlARemesa(xmlDoc, FicheroID) {
         sepaData.SvcLvlCd = pmtInf.getElementsByTagName('SvcLvl')[0].getElementsByTagName('Cd')[0].textContent
         sepaData.LclInstrmCd = pmtInf.getElementsByTagName('LclInstrm')[0].getElementsByTagName('Cd')[0].textContent
         sepaData.SeqTp = pmtInf.getElementsByTagName('SeqTp')[0].textContent
-        sepaData.SeqDate = pmtInf.getElementsByTagName('ReqdColltnDt')[0].textContent
+        const SeqDate = new Date(pmtInf.getElementsByTagName('ReqdColltnDt')[0].textContent)
+        sepaData.SeqDate = SeqDate.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
         sepaData.CdtrAcct = pmtInf.getElementsByTagName('CdtrAcct')[0].getElementsByTagName('IBAN')[0].textContent
         sepaData.Ccy = pmtInf.getElementsByTagName('CdtrAcct')[0].getElementsByTagName('Ccy')[0].textContent
         sepaData.CdtrAgtBIC = pmtInf.getElementsByTagName('CdtrAgt')[0].getElementsByTagName('FinInstnId')[0].getElementsByTagName('BIC')[0].textContent
