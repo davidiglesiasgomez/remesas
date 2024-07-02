@@ -596,6 +596,7 @@ document.getElementById('nuevaRemesaForm').onsubmit = (e) => {
 }
 
 document.getElementById('navNuevaBtn').addEventListener('click', function(e) {
+    cargarRemesa(actualRemesaData)
     mostrarSeccion('nueva')
 })
 
